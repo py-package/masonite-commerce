@@ -1,7 +1,7 @@
 # Masonite Commerce
 
 <p align="center">
-    <img src="https://banners.beyondco.de/Masonite Commerce.png?theme=light&packageManager=pip+install&packageName=masonite-masonite-commerce&pattern=topography&style=style_1&description=Package description in one line displayed e.g. in README&md=1&showWatermark=1&fontSize=100px&images=https%3A%2F%2Fgblobscdn.gitbook.com%2Fspaces%2F-L9uc-9XAlqhXkBwrLMA%2Favatar.png">
+    <img src="https://banners.beyondco.de/Masonite Commerce.png?theme=light&packageManager=pip+install&packageName=masonite-commerce&pattern=topography&style=style_1&description=Full-fledge e-commerce solution in masonite.&md=1&showWatermark=1&fontSize=100px&images=https%3A%2F%2Fgblobscdn.gitbook.com%2Fspaces%2F-L9uc-9XAlqhXkBwrLMA%2Favatar.png">
 </p>
 
 <p align="center">
@@ -37,23 +37,23 @@ Have questions or want to talk? Be sure to join the [Masonite Discord Community]
 ## Installation
 
 ```bash
-pip install masonite-masonite-commerce
+pip install masonite-commerce
 ```
 
 ## Configuration
 
-Add CommerceProvider to your project in `config/providers.py`:
+Add MasoniteCommerceProvider to your project in `config/providers.py`:
 
 ```python
 # config/providers.py
 # ...
-from masonite_commerce import CommerceProvider
+from masonite_commerce import MasoniteCommerceProvider
 
 # ...
 PROVIDERS = [
     # ...
     # Third Party Providers
-    CommerceProvider,
+    MasoniteCommerceProvider,
     # ...
 ]
 ```
@@ -78,6 +78,4 @@ Please read the [Contributing Documentation](CONTRIBUTING.md) here.
 
 ## License
 
-
 Masonite Commerce is open-sourced software licensed under the [MIT license](LICENSE).
-
