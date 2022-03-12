@@ -23,8 +23,19 @@ Package description in one line displayed e.g. in README
 
 ## Features
 
-- _Add your package main features here_
-- _and here_
+- Products
+- Custom Attributes
+- Categories
+- Tags
+- Reviews
+- Cart
+- Checkout
+- Order
+- Payment
+- Shipping
+- Tax
+- Coupons
+- Custom Reporting and Analytics
 
 ## Official Masonite Documentation
 

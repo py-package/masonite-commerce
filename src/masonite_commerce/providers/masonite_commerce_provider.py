@@ -10,7 +10,14 @@ class MasoniteCommerceProvider(PackageProvider):
         (
             self.root("masonite_commerce")
             .name("masonite-commerce")
-            .config("config/masonite_commerce.py", publish=True)
+            .config("config/commerce.py", publish=True)
+            .routes("routes/web.py", "routes/api.py")
+            .migrations(
+                "migrations/create_commerce_products_table.py",
+                "migrations/create_commerce_metas_table.py",
+                "migrations/create_commerce_categories_table.py",
+            )
+            .views("templates", publish=False)
         )
 
     def register(self):
