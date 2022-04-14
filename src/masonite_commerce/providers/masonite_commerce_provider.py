@@ -1,7 +1,7 @@
 """A MasoniteCommerceProvider Service Provider."""
 
 from masonite.packages import PackageProvider
-
+from ..commands import CommerceSeed
 
 class MasoniteCommerceProvider(PackageProvider):
 
@@ -22,6 +22,7 @@ class MasoniteCommerceProvider(PackageProvider):
 
     def register(self):
         super().register()
+        self.application.make('commands').add(CommerceSeed())
 
     def boot(self):
         """Boots services required by the container."""

@@ -79,6 +79,13 @@ python craft package:publish masonite-commerce
 
 _Explain how to use your package_
 
+**Dummy Content Seeder**
+
+```sh
+python craft commerce:seed
+python craft commerce:seed --clear
+```
+
 ## Contributing
 
 Please read the [Contributing Documentation](CONTRIBUTING.md) here.
