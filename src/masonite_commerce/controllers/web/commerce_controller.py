@@ -16,6 +16,6 @@ class CommerceController(Controller):
     def index(self, view: View):
         # return QueryBuilder().table("users").select("id", "name", "email").all().serialize()
 
-        return CommerceProduct.with_("categories").all()
+        return CommerceProduct.with_("categories", "meta").all()
         # return CommerceCategory.with_("products").all()
         return view.render("masonite-commerce:index", {})
