@@ -39,19 +39,19 @@ class CategoryController(Controller):
     
     def update(self, id):
         """ Updates a category """
-        
+
         category = CommerceCategory.find(id)
         category.update(self.request.all())
-        
+
         return self.response.json({
             "message": "Category updated successfully"
         }, status=STATUS_UPDATED)
-    
+
     def destroy(self, id):
         """ Deletes a category """
         category = CommerceCategory.find(id)
         category.delete()
-        
+
         return self.response.json({
             "message": "Category deleted successfully"
         }, status=STATUS_DELETED)
