@@ -7,6 +7,7 @@ from masoniteorm.query import QueryBuilder
 from ...models.CommerceProduct import CommerceProduct
 from ...models.CommerceCategory import CommerceCategory
 
+
 class CommerceController(Controller):
     def __init__(self, response: Response, request: Request) -> None:
         self.response = response
@@ -14,8 +15,7 @@ class CommerceController(Controller):
         self.manager = Commerce()
 
     def index(self, view: View):
-        # return QueryBuilder().table("users").select("id", "name", "email").all().serialize()
-
-        return CommerceProduct.with_("categories", "meta").all()
-        # return CommerceCategory.with_("products").all()
+        QueryBuilder().table("users").select("id", "name", "email").all().serialize()
+        CommerceProduct.with_("categories", "meta").all()
+        CommerceCategory.with_("products").all()
         return view.render("masonite-commerce:index", {})

@@ -10,6 +10,6 @@ class ProductController(Controller):
         self.request = request
 
     def index(self):
-        """ Returns a list of products """
-        
+        """Returns a list of products"""
+
         return CommerceProduct.paginate(10)

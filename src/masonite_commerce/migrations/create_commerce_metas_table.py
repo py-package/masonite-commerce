@@ -11,7 +11,9 @@ class CreateCommerceMetasTable(Migration):
         with self.schema.create("commerce_metas") as table:
             table.big_increments("id")
             table.big_integer("product_id").unsigned()
-            table.foreign("product_id").references("id").on("commerce_products").on_delete("cascade")
+            table.foreign("product_id").references("id").on("commerce_products").on_delete(
+                "cascade"
+            )
             table.string("sku", 100).nullable()
             table.boolean("virtual").default(False)
             table.boolean("downloadable").default(False)

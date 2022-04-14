@@ -3,8 +3,8 @@
 from masonite.packages import PackageProvider
 from ..commands import CommerceSeed
 
-class MasoniteCommerceProvider(PackageProvider):
 
+class MasoniteCommerceProvider(PackageProvider):
     def configure(self):
         """Register objects into the Service Container."""
         (
@@ -22,7 +22,7 @@ class MasoniteCommerceProvider(PackageProvider):
 
     def register(self):
         super().register()
-        self.application.make('commands').add(CommerceSeed())
+        self.application.make("commands").add(CommerceSeed())
 
     def boot(self):
         """Boots services required by the container."""

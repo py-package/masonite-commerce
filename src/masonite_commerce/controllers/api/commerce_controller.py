@@ -9,6 +9,4 @@ class CommerceController(Controller):
         self.request = request
 
     def index(self):
-        return self.response.json({
-            "message": "Hello Masonite Commerce!"
-        })
+        return self.response.json({"message": "Hello Masonite Commerce!"})

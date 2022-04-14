@@ -1,5 +1,6 @@
 from masonite.commands import Command
 
+
 class MasoniteCommerce(Command):
     """
     Description of Command

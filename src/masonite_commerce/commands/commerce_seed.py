@@ -2,6 +2,7 @@ from masonite.commands import Command
 from masoniteorm.query import QueryBuilder
 from masonite.facades import Hash
 
+
 class CommerceSeed(Command):
     """
     Sets up dummy data for the commerce demo.
@@ -11,7 +12,7 @@ class CommerceSeed(Command):
     """
 
     def handle(self):
-        clear = self.option('clear')
+        clear = self.option("clear")
         if clear:
             self.info("Resetting Database")
             self.reset()
@@ -21,63 +22,61 @@ class CommerceSeed(Command):
             self.seed_categories()
             self.seed_products()
 
-
     def reset(self):
-        """Reset Database
-        """
-    
-        QueryBuilder().table('users').where_in("email", ["john@doe.com", "jane@doe.com"]).delete()
-        QueryBuilder().table('commerce_products').truncate(True)
-        QueryBuilder().table('commerce_categories').truncate(True)
-        QueryBuilder().table('commerce_metas').truncate(True)
+        """Reset Database"""
+
+        QueryBuilder().table("users").where_in("email", ["john@doe.com", "jane@doe.com"]).delete()
+        QueryBuilder().table("commerce_products").truncate(True)
+        QueryBuilder().table("commerce_categories").truncate(True)
+        QueryBuilder().table("commerce_metas").truncate(True)
 
     def seed_users(self):
-        """Seed User Data
-        """
+        """Seed User Data"""
         self.info("Seeding User Data")
         users = [
             {
                 "name": "John Doe",
                 "email": "john@doe.com",
                 "password": Hash.make("password"),
-            }, {
+            },
+            {
                 "name": "Jane Doe",
                 "email": "jane@doe.com",
                 "password": Hash.make("password"),
-            }
+            },
         ]
-        QueryBuilder().table('users').bulk_create(users)
+        QueryBuilder().table("users").bulk_create(users)
 
     def seed_categories(self):
-        """Seed Category Data
-        """
+        """Seed Category Data"""
         self.info("Seeding Category Data")
-        user = QueryBuilder().table('users').where("email", "john@doe.com").first()
+        user = QueryBuilder().table("users").where("email", "john@doe.com").first()
         categories = [
             {
                 "creator_id": user.get("id"),
                 "title": "Electronics",
                 "slug": "electronics",
                 "status": "published",
-            }, {
+            },
+            {
                 "creator_id": user.get("id"),
                 "title": "Furniture",
                 "slug": "furniture",
                 "status": "published",
-            }, {
+            },
+            {
                 "creator_id": user.get("id"),
                 "title": "Clothing",
                 "slug": "clothing",
                 "status": "published",
-            }
+            },
         ]
-        QueryBuilder().table('commerce_categories').bulk_create(categories)
+        QueryBuilder().table("commerce_categories").bulk_create(categories)
 
     def seed_products(self):
-        """Seed Product Data
-        """
+        """Seed Product Data"""
         self.info("Seeding Product Data")
-        user = QueryBuilder().table('users').where("email", "john@doe.com").first()
+        user = QueryBuilder().table("users").where("email", "john@doe.com").first()
         products = [
             {
                 "creator_id": user.get("id"),
@@ -89,7 +88,8 @@ class CommerceSeed(Command):
                 "comment_count": 0,
                 "comment_status": "open",
                 "status": "published",
-            }, {
+            },
+            {
                 "creator_id": user.get("id"),
                 "title": "Macbook Pro",
                 "slug": "macbook-pro",
@@ -99,7 +99,8 @@ class CommerceSeed(Command):
                 "comment_count": 0,
                 "comment_status": "open",
                 "status": "published",
-            }, {
+            },
+            {
                 "creator_id": user.get("id"),
                 "title": "Macbook Air",
                 "slug": "macbook-air",
@@ -109,20 +110,24 @@ class CommerceSeed(Command):
                 "comment_count": 0,
                 "comment_status": "open",
                 "status": "published",
-            }
+            },
         ]
 
-        QueryBuilder().table('commerce_products').bulk_create(products)
-        
-        category = QueryBuilder().table('commerce_categories').where("title", "electronics").first()
-        products = QueryBuilder().table('commerce_products').get()
+        QueryBuilder().table("commerce_products").bulk_create(products)
+
+        category = (
+            QueryBuilder().table("commerce_categories").where("title", "electronics").first()
+        )
+        products = QueryBuilder().table("commerce_products").get()
 
         category_product = []
 
         for product in products:
-            category_product.append({
-                "product_id": product.get("id"),
-                "category_id": category.get("id"),
-            })
+            category_product.append(
+                {
+                    "product_id": product.get("id"),
+                    "category_id": category.get("id"),
+                }
+            )
 
-        QueryBuilder().table('commerce_category_product').bulk_create(category_product)
+        QueryBuilder().table("commerce_category_product").bulk_create(category_product)

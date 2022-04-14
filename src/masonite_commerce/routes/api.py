@@ -6,14 +6,12 @@ from src.masonite_commerce.controllers.api.product_controller import ProductCont
 
 
 ROUTES = Route.group(
-    [   
+    [
         # Product Routes
         Route.get("/products", ProductController.index),
-        
         # Category Routes
-        Route.get("/categories", CategoryController.index)
-        
+        Route.get("/categories", CategoryController.index),
     ],
     prefix=config("commerce.endpoint.api", default="/commerce/api/v1"),
-    middleware=config("commerce.middleware", default=['web']),
+    middleware=config("commerce.middleware", default=["web"]),
 )
