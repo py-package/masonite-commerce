@@ -11,9 +11,13 @@ class CreateCommerceProductAttributeTable(Migration):
         with self.schema.create("commerce_product_attribute") as table:
             table.increments("id")
             table.integer("product_id").unsigned()
-            table.foreign("product_id").references("id").on("commerce_products").on_delete("cascade")
+            table.foreign("product_id").references("id").on("commerce_products").on_delete(
+                "cascade"
+            )
             table.integer("attribute_id").unsigned()
-            table.foreign("attribute_id").references("id").on("commerce_attributes").on_delete("cascade")
+            table.foreign("attribute_id").references("id").on("commerce_attributes").on_delete(
+                "cascade"
+            )
             table.string("value")
             table.timestamps()
 

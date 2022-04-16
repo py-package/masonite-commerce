@@ -22,14 +22,12 @@ class CommerceCategory(Model):
 
         return CommerceProduct
 
-
     @has_many("id", "parent_id")
     def children(self):
         """Returns all children for this category."""
         from ..models.CommerceCategory import CommerceCategory
 
         return CommerceCategory
-
 
     @belongs_to("parent_id", "id")
     def parent(self):

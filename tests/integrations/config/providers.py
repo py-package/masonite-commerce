@@ -50,4 +50,4 @@ PROVIDERS = [
     ORMProvider
 ]
 
-PROVIDERS += [ MasoniteCommerceProvider ]
+PROVIDERS += [MasoniteCommerceProvider]

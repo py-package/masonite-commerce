@@ -25,7 +25,6 @@ class CommerceComment(Model):
 
         return CommerceComment
 
-
     @belongs_to("parent_id", "id")
     def parent(self):
         """Returns the parent for this comment."""
