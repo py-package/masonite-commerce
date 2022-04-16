@@ -9,8 +9,8 @@ class CreateCommerceCategoriesTable(Migration):
         Run the migrations.
         """
         with self.schema.create("commerce_categories") as table:
-            table.big_increments("id")
-            table.big_integer("parent_id").unsigned().nullable()
+            table.increments("id")
+            table.integer("parent_id").unsigned().nullable()
             table.foreign("parent_id").references("id").on("commerce_categories")
             table.string("title")
             table.string("slug")

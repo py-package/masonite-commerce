@@ -1,6 +1,6 @@
 """CommerceProduct Model."""
 from masoniteorm.models import Model
-from masoniteorm.relationships import belongs_to_many, has_many
+from masoniteorm.relationships import belongs_to_many, has_one
 
 
 class CommerceProduct(Model):
@@ -32,7 +32,7 @@ class CommerceProduct(Model):
 
         return CommerceCategory
 
-    @has_many("id", "product_id")
+    @has_one("product_id", "id")
     def meta(self):
         """Returns all metas for this product."""
         from ..models.CommerceMeta import CommerceMeta

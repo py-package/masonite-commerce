@@ -18,14 +18,10 @@ class CategoryController(Controller):
     def index(self):
         """Returns a list of categories"""
 
-        CommerceCategory.create(
-            {
-                "title": "Electronics",
-                "slug": "electronics",
-                "status": "published",
-            }
-        )
-        return CommerceCategory.paginate(10)
+        per_page = int(self.request.input("per-page", 10))
+        page = int(self.request.input("page", 1))
+        
+        return CommerceCategory.with_('children').where_null("parent_id").paginate(per_page, page)
 
     def show(self, id):
         """Returns a single category"""

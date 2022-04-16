@@ -14,6 +14,7 @@ class CommerceMeta(Model):
         "sku",
         "virtual",
         "downloadable",
+        "price",
         "min_price",
         "max_price",
         "on_sale",
