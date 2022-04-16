@@ -19,7 +19,7 @@
 
 ## Introduction
 
-Package description in one line displayed e.g. in README
+Full-fledge e-commerce solution in masonite.
 
 ## Features
 
@@ -37,13 +37,8 @@ Package description in one line displayed e.g. in README
 - Coupons
 - Custom Reporting and Analytics
 
-## Official Masonite Documentation
-
-New to Masonite ? Please first read the [Official Documentation](https://docs.masoniteproject.com/).
-Masonite strives to have extremely comprehensive documentation 😃. It would be wise to go through the tutorials there.
-If you find any discrepencies or anything that doesn't make sense, be sure to comment directly on the documentation to start a discussion!
-
-Have questions or want to talk? Be sure to join the [Masonite Discord Community](https://discord.gg/TwKeFahmPZ)!
+**Database Design (v1)**
+![Database Design (v1)](https://github.com/yubarajshrestha/masonite-commerce/blob/master/docs/masonite_commerce.png?raw=true)
 
 ## Installation
 
@@ -77,8 +72,6 @@ python craft package:publish masonite-commerce
 
 ## Usage
 
-_Explain how to use your package_
-
 **Dummy Content Seeder**
 
 ```sh
@@ -86,13 +79,13 @@ python craft commerce:seed
 python craft commerce:seed --clear
 ```
 
+## API Docs
+
+API documentation can be found [here](docs/API.md).
+
 ## Contributing
 
 Please read the [Contributing Documentation](CONTRIBUTING.md) here.
-
-## Maintainers
-
-- [Yubaraj Shrestha](https://www.github.com/yubarajshrestha)
 
 ## License
 
