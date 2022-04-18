@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<div class="h-screen flex flex-col items-center">
+    <div class="bg-white rounded-lg shadow-lg p-4">
+        <div class="flex flex-col">
+            <div class="flex-1">
+                <img src="{{ product.image }}" alt="{{ product.name }}" class="w-full">
+            </div>
+            <div class="flex-1 p-4">
+                <h3 class="text-xl font-bold">{{ product.title }}</h3>
+                <p class="text-gray-700 text-base">{{ product.excerpt }}</p>
+                <p class="text-gray-700 text-base">{{ product.price }}</p>
+                <a href="/commerce/products/{{product.slug}}"
+                    class="px-3 py-2 text-white bg-black mt-4 inline-block">View Product</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

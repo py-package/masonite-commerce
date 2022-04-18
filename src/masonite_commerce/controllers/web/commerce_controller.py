@@ -6,6 +6,7 @@ from ...commerce import Commerce
 from masoniteorm.query import QueryBuilder
 from ...models.CommerceProduct import CommerceProduct
 from ...models.CommerceCategory import CommerceCategory
+from masoniteorm.expressions import JoinClause
 
 
 class CommerceController(Controller):
@@ -19,3 +20,65 @@ class CommerceController(Controller):
         CommerceProduct.with_("categories", "meta").all()
         CommerceCategory.with_("products").all()
         return view.render("masonite-commerce:index", {})
+
+    def products(self, view: View):
+        per_page = int(self.request.input("per-page", 10))
+        page = int(self.request.input("page", 1))
+
+        comment_query = JoinClause("commerce_comments as comments").on(
+            "comments.product_id", "=", "commerce_products.id"
+        )
+        meta_query = JoinClause("commerce_metas as metas").on(
+            "metas.product_id", "=", "commerce_products.id"
+        )
+
+        products = (
+            CommerceProduct.select_raw(
+                """
+                commerce_products.*,
+                CONVERT(metas.price, FLOAT) as price,
+                CONVERT(metas.average_rating, FLOAT) as avg_rating,
+                metas.stock_status,
+                CONVERT(metas.stock_quantity, UNSIGNED) as quantity,
+                count(comments.id) as total_comments
+            """
+            )
+            .join(comment_query)
+            .join(meta_query)
+            .group_by("comments.product_id, metas.id")
+            .paginate(per_page, page)
+        )
+
+        return view.render("masonite-commerce:products/index", {
+            "products": products,
+        })
+
+    def show(self, view: View):
+        comment_query = JoinClause("commerce_comments as comments").on(
+            "comments.product_id", "=", "commerce_products.id"
+        )
+        meta_query = JoinClause("commerce_metas as metas").on(
+            "metas.product_id", "=", "commerce_products.id"
+        )
+
+        product = (
+            CommerceProduct.select_raw(
+                """
+                commerce_products.*,
+                CONVERT(metas.price, FLOAT) as price,
+                CONVERT(metas.average_rating, FLOAT) as avg_rating,
+                metas.stock_status,
+                CONVERT(metas.stock_quantity, UNSIGNED) as quantity,
+                count(comments.id) as total_comments
+            """
+            )
+            .join(comment_query)
+            .join(meta_query)
+            .group_by("comments.product_id, metas.id")
+            .where("commerce_products.slug", "=", self.request.param("slug"))
+            .first()
+        )
+
+        return view.render("masonite-commerce:products/show", {
+            "product": product,
+        })
