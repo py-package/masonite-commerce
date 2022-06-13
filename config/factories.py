@@ -41,7 +41,7 @@ def comment_factory(faker):
     return {
         'creator_id': random.randint(1, 11),
         'product_id': random.randint(1, 200),
-        'content': '\\n'.join(faker.paragraphs(random.randint(2, 3))),
+        'content': '\n'.join(faker.paragraphs(random.randint(2, 3))),
         'status': random.choice(['draft', 'published', 'archived']),
     }
     

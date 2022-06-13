@@ -11,11 +11,13 @@ class CreateCommerceCategoriesTable(Migration):
         """
         with self.schema.create("commerce_categories") as table:
             table.increments("id")
+            table.integer("creator_id").unsigned().nullable()
+            table.foreign("creator_id").references("id").on("users").on_delete("set null")
             table.integer("parent_id").unsigned().nullable()
-            table.foreign("parent_id").references("id").on("commerce_categories")
+            table.foreign("parent_id").references("id").on("commerce_categories").on_delete("set null")
             table.string("title")
             table.string("slug")
-            table.string("status")  # draft, published, archived
+            table.string("status", 12)  # draft, published, archived
             table.timestamps()
 
     def down(self):

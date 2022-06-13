@@ -9,12 +9,16 @@ class CreateCommerceProductAttributeTable(Migration):
         """
         Run the migrations.
         """
-        with self.schema.create("commerce_product_attributes") as table:
+        with self.schema.create("commerce_product_attribute") as table:
             table.increments("id")
             table.integer("product_id").unsigned()
-            table.foreign("product_id").references("id").on("commerce_products").on_delete("cascade")
+            table.foreign("product_id").references("id").on("commerce_products").on_delete(
+                "cascade"
+            )
             table.integer("attribute_id").unsigned()
-            table.foreign("attribute_id").references("id").on("commerce_attributes").on_delete("cascade")
+            table.foreign("attribute_id").references("id").on("commerce_attributes").on_delete(
+                "cascade"
+            )
             table.string("value")
             table.timestamps()
 
@@ -22,4 +26,4 @@ class CreateCommerceProductAttributeTable(Migration):
         """
         Revert the migrations.
         """
-        self.schema.drop("commerce_product_attributes")
+        self.schema.drop("commerce_product_attribute")

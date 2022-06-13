@@ -19,7 +19,7 @@ class ProductController(Controller):
         comment_query = JoinClause("commerce_comments as comments", clause="left").on(
             "comments.product_id", "=", "commerce_products.id"
         )
-        meta_query = JoinClause("commerce_metas as metas", clause="left").on(
+        meta_query = JoinClause("commerce_product_meta as metas", clause="left").on(
             "metas.product_id", "=", "commerce_products.id"
         )
 
@@ -36,6 +36,8 @@ class ProductController(Controller):
             )
             .join(comment_query)
             .join(meta_query)
+            .where("commerce_products.status", "=", "published")
+            .where("metas.stock_status", "=", "instock")
             .group_by("metas.id, commerce_products.id")
             .paginate(per_page, page)
         )
@@ -50,7 +52,7 @@ class ProductController(Controller):
         comment_query = JoinClause("commerce_comments as comments", clause="left").on(
             "comments.product_id", "=", "commerce_products.id"
         )
-        meta_query = JoinClause("commerce_metas as metas", clause="left").on(
+        meta_query = JoinClause("commerce_product_meta as metas", clause="left").on(
             "metas.product_id", "=", "commerce_products.id"
         )
 

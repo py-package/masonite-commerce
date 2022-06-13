@@ -18,7 +18,6 @@ class CreateCommerceProductsTable(Migration):
             table.text("excerpt").nullable()
             table.text("content").nullable()
             table.string("cover_image").nullable()
-            table.integer("comment_count").default(0)
             table.string("comment_status").default("open")  # open, closed
             table.string("status", 20).default("draft")  # draft, published, archived
             table.timestamps()

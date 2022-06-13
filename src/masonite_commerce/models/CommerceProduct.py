@@ -35,6 +35,6 @@ class CommerceProduct(Model):
     @has_one("product_id", "id")
     def meta(self):
         """Returns all metas for this product."""
-        from ..models.CommerceMeta import CommerceMeta
+        from .CommerceProductMeta import CommerceProductMeta
 
-        return CommerceMeta
+        return CommerceProductMeta

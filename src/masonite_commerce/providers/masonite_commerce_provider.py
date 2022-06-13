@@ -14,8 +14,12 @@ class MasoniteCommerceProvider(PackageProvider):
             .routes("routes/web.py", "routes/api.py")
             .migrations(
                 "migrations/create_commerce_products_table.py",
-                "migrations/create_commerce_metas_table.py",
                 "migrations/create_commerce_categories_table.py",
+                "migrations/create_commerce_metas_table.py",
+                "migrations/create_commerce_attributes_table.py",
+                "migrations/create_commerce_category_product_table.py",
+                "migrations/create_commerce_product_attribute_table.py",
+                "migrations/create_commerce_comments_table.py",
             )
             .views("templates", publish=False)
         )

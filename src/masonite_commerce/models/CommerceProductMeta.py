@@ -1,12 +1,12 @@
-"""CommerceMeta Model."""
+"""CommerceProductMeta Model."""
 from masoniteorm.models import Model
 from masoniteorm.relationships import belongs_to
 
 
-class CommerceMeta(Model):
-    """CommerceMeta Model."""
+class CommerceProductMeta(Model):
+    """CommerceProductMeta Model."""
 
-    __table__ = "commerce_metas"
+    __table__ = "commerce_product_meta"
     __primary_key__ = "id"
 
     __fillable__ = [
@@ -29,6 +29,6 @@ class CommerceMeta(Model):
     @belongs_to
     def product(self):
         """Returns the product for this meta."""
-        from ..models.CommerceProduct import CommerceProduct
+        from .CommerceProduct import CommerceProduct
 
         return CommerceProduct
