@@ -16,10 +16,10 @@ class ProductController(Controller):
         per_page = int(self.request.input("per-page", 10))
         page = int(self.request.input("page", 1))
 
-        comment_query = JoinClause("commerce_comments as comments").on(
+        comment_query = JoinClause("commerce_comments as comments", clause="left").on(
             "comments.product_id", "=", "commerce_products.id"
         )
-        meta_query = JoinClause("commerce_metas as metas").on(
+        meta_query = JoinClause("commerce_metas as metas", clause="left").on(
             "metas.product_id", "=", "commerce_products.id"
         )
 
@@ -27,16 +27,16 @@ class ProductController(Controller):
             CommerceProduct.select_raw(
                 """
                 commerce_products.*,
-                CONVERT(metas.price, FLOAT) as price,
-                CONVERT(metas.average_rating, FLOAT) as avg_rating,
+                cast(coalesce(metas.price, 0) as int) as price,
+                cast(coalesce(metas.average_rating, 0) as int) as avg_rating,
                 metas.stock_status,
-                CONVERT(metas.stock_quantity, UNSIGNED) as quantity,
+                cast(coalesce(metas.stock_quantity, 0) as int) as quantity,
                 count(comments.id) as total_comments
             """
             )
             .join(comment_query)
             .join(meta_query)
-            .group_by("comments.product_id, metas.id")
+            .group_by("metas.id, commerce_products.id")
             .paginate(per_page, page)
         )
 
@@ -47,10 +47,10 @@ class ProductController(Controller):
     def show(self, id: int):
         """Returns a single product"""
 
-        comment_query = JoinClause("commerce_comments as comments").on(
+        comment_query = JoinClause("commerce_comments as comments", clause="left").on(
             "comments.product_id", "=", "commerce_products.id"
         )
-        meta_query = JoinClause("commerce_metas as metas").on(
+        meta_query = JoinClause("commerce_metas as metas", clause="left").on(
             "metas.product_id", "=", "commerce_products.id"
         )
 
@@ -58,17 +58,17 @@ class ProductController(Controller):
             CommerceProduct.select_raw(
                 """
                 commerce_products.*,
-                CONVERT(metas.price, FLOAT) as price,
-                CONVERT(metas.average_rating, FLOAT) as avg_rating,
+                cast(coalesce(metas.price, 0) as int) as price,
+                cast(coalesce(metas.average_rating, 0) as int) as avg_rating,
                 metas.stock_status,
-                CONVERT(metas.stock_quantity, UNSIGNED) as quantity,
-                count(comments.id) as total_comments,
+                cast(coalesce(metas.stock_quantity, 0) as int) as quantity,
+                count(comments.id) as total_comments
             """
             )
             .join(comment_query)
             .join(meta_query)
             .where("commerce_products.id", "=", id)
-            .group_by("comments.product_id, metas.id")
+            .group_by("comments.product_id, metas.id, commerce_products.id")
             .first()
         )
 
