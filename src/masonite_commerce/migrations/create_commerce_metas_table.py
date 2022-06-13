@@ -1,3 +1,4 @@
+# flake8: noqa: E501
 """CreateCommerceMetasTable Migration."""
 
 from masoniteorm.migrations import Migration

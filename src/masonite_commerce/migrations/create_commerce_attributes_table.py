@@ -1,3 +1,4 @@
+# flake8: noqa: E501
 """CreateCommerceAttributesTable Migration."""
 
 from masoniteorm.migrations import Migration

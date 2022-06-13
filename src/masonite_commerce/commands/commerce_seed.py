@@ -1,3 +1,4 @@
+# flake8: noqa: E501
 import random
 from faker import Faker
 from masonite.commands import Command

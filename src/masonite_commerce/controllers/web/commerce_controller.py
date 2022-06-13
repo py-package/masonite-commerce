@@ -49,9 +49,12 @@ class CommerceController(Controller):
             .paginate(per_page, page)
         )
 
-        return view.render("masonite-commerce:products/index", {
-            "products": products,
-        })
+        return view.render(
+            "masonite-commerce:products/index",
+            {
+                "products": products,
+            },
+        )
 
     def show(self, view: View):
         comment_query = JoinClause("commerce_comments as comments").on(
@@ -79,6 +82,9 @@ class CommerceController(Controller):
             .first()
         )
 
-        return view.render("masonite-commerce:products/show", {
-            "product": product,
-        })
+        return view.render(
+            "masonite-commerce:products/show",
+            {
+                "product": product,
+            },
+        )
