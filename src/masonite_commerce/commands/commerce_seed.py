@@ -34,9 +34,9 @@ class CommerceSeed(Command):
         QueryBuilder().table("users").where_in("email", ["john@doe.com", "jane@doe.com"]).delete()
         QueryBuilder().table("commerce_products").truncate(True)
         QueryBuilder().table("commerce_categories").truncate(True)
-        QueryBuilder().table("commerce_metas").truncate(True)
+        QueryBuilder().table("commerce_product_meta").truncate(True)
         QueryBuilder().table("commerce_attributes").truncate(True)
-        QueryBuilder().table("commerce_product_attributes").truncate(True)
+        QueryBuilder().table("commerce_product_attribute").truncate(True)
         QueryBuilder().table("commerce_comments").truncate(True)
 
     def seed_users(self):
@@ -97,7 +97,6 @@ class CommerceSeed(Command):
                     "excerpt": fake.sentence(),
                     "content": fake.text(),
                     "cover_image": "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60",
-                    "comment_count": 0,
                     "comment_status": "open",
                     "status": "published",
                 }
@@ -148,7 +147,7 @@ class CommerceSeed(Command):
                 }
             )
 
-        QueryBuilder().table("commerce_metas").bulk_create(metas)
+        QueryBuilder().table("commerce_product_meta").bulk_create(metas)
 
     def seed_attributes(self):
         """Seed Attribute Data"""
@@ -198,7 +197,7 @@ class CommerceSeed(Command):
                     }
                 )
 
-        QueryBuilder().table("commerce_product_attributes").bulk_create(attribute_product)
+        QueryBuilder().table("commerce_product_attribute").bulk_create(attribute_product)
 
     def seed_comments(self):
         """Seed Comment Data"""

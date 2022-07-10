@@ -1,6 +1,8 @@
 from masonite.controllers import Controller
 from masonite.request import Request
 from masonite.response import Response
+
+from src.masonite_commerce.models.CommerceComment import CommerceComment
 from ...models.CommerceProduct import CommerceProduct
 from masoniteorm.expressions import JoinClause
 
@@ -42,9 +44,7 @@ class ProductController(Controller):
             .paginate(per_page, page)
         )
 
-        return {
-            "data": products.serialize(),
-        }
+        return products
 
     def show(self, id: int):
         """Returns a single product"""
@@ -77,3 +77,17 @@ class ProductController(Controller):
         return {
             "data": product.serialize(),
         }
+
+    def comments(self, id: int):
+        """Returns a list of comments for a product"""
+
+        per_page = int(self.request.input("per-page", 10))
+        page = int(self.request.input("page", 1))
+
+        comments = (
+            CommerceComment
+            .where("product_id", "=", id)
+            .paginate(per_page, page)
+        )
+
+        return comments

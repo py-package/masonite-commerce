@@ -31,3 +31,4 @@ class CommerceComment(Model):
         from ..models.CommerceComment import CommerceComment
 
         return CommerceComment
+

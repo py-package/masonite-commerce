@@ -16,7 +16,6 @@ class CommerceProduct(Model):
         "excerpt",
         "content",
         "cover_image",
-        "comment_count",
         "comment_status",
         "status",
     ]

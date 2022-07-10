@@ -1,3 +1,4 @@
+import logging
 from masonite.environment import LoadEnvironment, env
 from masoniteorm.connections import ConnectionResolver
 
@@ -32,14 +33,14 @@ DATABASES = {
     },
     "postgres": {
         "driver": "postgres",
-        "host": env("DB_HOST"),
-        "user": env("DB_USERNAME"),
-        "password": env("DB_PASSWORD"),
-        "database": env("DB_DATABASE"),
-        "port": env("DB_PORT"),
+        "host": env("DB_HOST", "localhost"),
+        "user": env("DB_USERNAME", "postgres"),
+        "password": env("DB_PASSWORD", ""),
+        "database": env("DB_DATABASE", "masonite_commerce"),
+        "port": env("DB_PORT", "5432"),
         "prefix": "",
         "grammar": "postgres",
-        "log_queries": env("DB_LOG"),
+        "log_queries": env("DB_LOG", True),
     },
     "mssql": {
         "driver": "mssql",
@@ -54,3 +55,9 @@ DATABASES = {
 }
 
 DB = ConnectionResolver().set_connection_details(DATABASES)
+
+logger = logging.getLogger('masoniteorm.connection.queries')
+logger.setLevel(logging.DEBUG)
+handler = logging.StreamHandler()
+
+logger.addHandler(handler)

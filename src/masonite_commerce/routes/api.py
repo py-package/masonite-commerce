@@ -10,6 +10,7 @@ ROUTES = Route.group(
         # Product Routes
         Route.get("/products", ProductController.index),
         Route.get("/products/@id:int", ProductController.show),
+        Route.get("/products/@id:int/comments", ProductController.comments),
         # Category Routes
         Route.get("/categories", CategoryController.index),
     ],
