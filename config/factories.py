@@ -9,6 +9,7 @@ from src.masonite_commerce.models.CommerceComment import CommerceComment
 from src.masonite_commerce.models.CommerceTag import CommerceTag
 from tests.integrations.app.models.User import User
 
+
 def user_factory(faker):
     return {
         "name": faker.unique.name(),
@@ -16,6 +17,7 @@ def user_factory(faker):
         "password": Hash.make("secret"),
         "phone": faker.phone_number(),
     }
+
 
 def category_factory(faker):
     title = " ".join(faker.words(3))
@@ -26,13 +28,15 @@ def category_factory(faker):
         'status': random.choice(['draft', 'published', 'archived']),
     }
 
+
 def tag_factory(faker):
     title = " ".join(faker.words(3))
     return {
         'title': title,
         'slug': title.lower().replace(' ', '-'),
     }
-    
+
+
 def product_factory(faker):
     title = " ".join(faker.words(2))
     return {
@@ -44,7 +48,8 @@ def product_factory(faker):
         'cover_image': faker.image_url(),
         'status': random.choice(['draft', 'published', 'archived']),
     }
-    
+
+
 def comment_factory(faker):
     return {
         'creator_id': random.randint(1, 11),
@@ -52,7 +57,8 @@ def comment_factory(faker):
         'content': '\n'.join(faker.paragraphs(random.randint(2, 3))),
         'status': random.choice(['draft', 'published', 'archived']),
     }
-    
+
+
 Factory.register(User, user_factory)
 Factory.register(CommerceCategory, category_factory)
 Factory.register(CommerceProduct, product_factory)

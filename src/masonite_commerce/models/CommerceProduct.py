@@ -42,7 +42,7 @@ class CommerceProduct(Model):
         local_foreign_key="product_id",
         other_foreign_key="attribute_id",
         table="commerce_product_attribute",
-        with_fields=["value"]
+        with_fields=["value"],
     )
     def attributes(self):
         """Returns all attributes for this product."""

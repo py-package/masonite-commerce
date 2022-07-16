@@ -85,10 +85,6 @@ class ProductController(Controller):
         per_page = int(self.request.input("per-page", 10))
         page = int(self.request.input("page", 1))
 
-        comments = (
-            CommerceComment
-            .where("product_id", "=", id)
-            .paginate(per_page, page)
-        )
+        comments = CommerceComment.where("product_id", "=", id).paginate(per_page, page)
 
         return comments

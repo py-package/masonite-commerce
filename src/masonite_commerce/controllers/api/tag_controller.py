@@ -44,15 +44,11 @@ class TagController(Controller):
         tag = CommerceTag.find(id)
         tag.update(self.request.all())
 
-        return self.response.json(
-            {"message": "Tag updated successfully"}, status=STATUS_UPDATED
-        )
+        return self.response.json({"message": "Tag updated successfully"}, status=STATUS_UPDATED)
 
     def destroy(self, id):
         """Deletes a tag"""
         tag = CommerceTag.find(id)
         tag.delete()
 
-        return self.response.json(
-            {"message": "Tag deleted successfully"}, status=STATUS_DELETED
-        )
+        return self.response.json({"message": "Tag deleted successfully"}, status=STATUS_DELETED)

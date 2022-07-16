@@ -21,4 +21,3 @@ class CommerceTag(Model):
         from ..models.CommerceProduct import CommerceProduct
 
         return CommerceProduct
-
