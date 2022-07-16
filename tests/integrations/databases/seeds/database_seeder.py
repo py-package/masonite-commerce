@@ -4,6 +4,7 @@ from masoniteorm.seeds import Seeder
 from tests.integrations.databases.seeds.category_table_seeder import CategoryTableSeeder
 from tests.integrations.databases.seeds.comment_table_seeder import CommentTableSeeder
 from tests.integrations.databases.seeds.product_seeder import ProductTableSeeder
+from tests.integrations.databases.seeds.tag_seeder import TagTableSeeder
 
 from .user_table_seeder import UserTableSeeder
 
@@ -15,3 +16,4 @@ class DatabaseSeeder(Seeder):
         self.call(CategoryTableSeeder)
         self.call(ProductTableSeeder)
         self.call(CommentTableSeeder)
+        self.call(TagTableSeeder)
