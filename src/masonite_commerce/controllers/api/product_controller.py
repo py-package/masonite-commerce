@@ -70,6 +70,7 @@ class ProductController(Controller):
             .join(comment_query)
             .join(meta_query)
             .where("commerce_products.id", "=", id)
+            .with_("meta", "categories", "attributes", "tags")
             .group_by("comments.product_id, metas.id, commerce_products.id")
             .first()
         )
