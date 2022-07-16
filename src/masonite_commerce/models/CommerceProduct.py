@@ -37,3 +37,26 @@ class CommerceProduct(Model):
         from .CommerceProductMeta import CommerceProductMeta
 
         return CommerceProductMeta
+
+    @belongs_to_many(
+        local_foreign_key="product_id",
+        other_foreign_key="attribute_id",
+        table="commerce_product_attribute",
+        with_fields=["value"]
+    )
+    def attributes(self):
+        """Returns all attributes for this product."""
+        from ..models.CommerceAttribute import CommerceAttribute
+
+        return CommerceAttribute
+
+    @belongs_to_many(
+        local_foreign_key="product_id",
+        other_foreign_key="tag_id",
+        table="commerce_product_tag",
+    )
+    def tags(self):
+        """Returns all products for this tag."""
+        from ..models.CommerceTag import CommerceTag
+
+        return CommerceTag

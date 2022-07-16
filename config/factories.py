@@ -6,6 +6,7 @@ from masonite.facades import Hash
 from src.masonite_commerce.models.CommerceCategory import CommerceCategory
 from src.masonite_commerce.models.CommerceProduct import CommerceProduct
 from src.masonite_commerce.models.CommerceComment import CommerceComment
+from src.masonite_commerce.models.CommerceTag import CommerceTag
 from tests.integrations.app.models.User import User
 
 def user_factory(faker):
@@ -23,6 +24,13 @@ def category_factory(faker):
         'title': title,
         'slug': title.lower().replace(' ', '-'),
         'status': random.choice(['draft', 'published', 'archived']),
+    }
+
+def tag_factory(faker):
+    title = " ".join(faker.words(3))
+    return {
+        'title': title,
+        'slug': title.lower().replace(' ', '-'),
     }
     
 def product_factory(faker):
@@ -49,3 +57,4 @@ Factory.register(User, user_factory)
 Factory.register(CommerceCategory, category_factory)
 Factory.register(CommerceProduct, product_factory)
 Factory.register(CommerceComment, comment_factory)
+Factory.register(CommerceTag, tag_factory)
