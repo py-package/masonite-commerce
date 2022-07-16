@@ -70,6 +70,7 @@ class ProductController(Controller):
             .join(comment_query)
             .join(meta_query)
             .where("commerce_products.id", "=", id)
+            .with_("meta", "categories", "attributes", "tags")
             .group_by("comments.product_id, metas.id, commerce_products.id")
             .first()
         )
@@ -84,10 +85,6 @@ class ProductController(Controller):
         per_page = int(self.request.input("per-page", 10))
         page = int(self.request.input("page", 1))
 
-        comments = (
-            CommerceComment
-            .where("product_id", "=", id)
-            .paginate(per_page, page)
-        )
+        comments = CommerceComment.where("product_id", "=", id).paginate(per_page, page)
 
         return comments

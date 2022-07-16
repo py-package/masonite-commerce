@@ -16,5 +16,5 @@ class UserTableSeeder(Seeder):
                 "phone": "+123456789",
             }
         )
-        
+
         Factory(User, 10).create()

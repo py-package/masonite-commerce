@@ -6,6 +6,7 @@ from config.factories import Factory
 from src.masonite_commerce.models.CommerceProduct import CommerceProduct
 from masoniteorm.query import QueryBuilder
 
+
 class ProductTableSeeder(Seeder):
     def run(self):
         """Run the database seeds."""
@@ -14,7 +15,7 @@ class ProductTableSeeder(Seeder):
         meta_builder = QueryBuilder().table("commerce_product_meta")
         data = []
         metas = []
-        
+
         for i in range(1, 200):
             num = random.randint(2, 5)
             items = random.sample(range(1, 50), num)
@@ -31,10 +32,9 @@ class ProductTableSeeder(Seeder):
                 "rating_count": random.randint(1, 1000),
                 "average_rating": random.randint(1, 5),
                 "total_sales": random.randint(1, 1000),
-            })    
+            })
             for item in items:
                 data.append({"product_id": i, "category_id": item})
-                
+
         builder.bulk_create(data)
         meta_builder.bulk_create(metas)
-        
