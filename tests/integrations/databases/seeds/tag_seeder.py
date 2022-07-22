@@ -8,4 +8,4 @@ from src.masonite_commerce.models.CommerceTag import CommerceTag
 class TagTableSeeder(Seeder):
     def run(self):
         """Run the database seeds."""
-        Factory(CommerceTag, 10).create()
+        Factory(CommerceTag, 50).create()
