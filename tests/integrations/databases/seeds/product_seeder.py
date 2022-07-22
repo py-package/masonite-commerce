@@ -11,14 +11,19 @@ class ProductTableSeeder(Seeder):
     def run(self):
         """Run the database seeds."""
         Factory(CommerceProduct, 200).create()
-        builder = QueryBuilder().table("commerce_category_product")
+        category_builder = QueryBuilder().table("commerce_category_product")
         meta_builder = QueryBuilder().table("commerce_product_meta")
-        data = []
+        tag_builder = QueryBuilder().table("commerce_product_tag")
+
+        categories = []
         metas = []
+        tags = []
 
         for i in range(1, 200):
             num = random.randint(2, 5)
-            items = random.sample(range(1, 50), num)
+            random_categories = random.sample(range(1, 50), num)
+            random_tags = random.sample(range(1, 50), num)
+
             metas.append({
                 "product_id": i,
                 "price": random.randint(200, 800),
@@ -33,8 +38,13 @@ class ProductTableSeeder(Seeder):
                 "average_rating": random.randint(1, 5),
                 "total_sales": random.randint(1, 1000),
             })
-            for item in items:
-                data.append({"product_id": i, "category_id": item})
+            for category in random_categories:
+                categories.append({"product_id": i, "category_id": category})
 
-        builder.bulk_create(data)
+            for tag in random_tags:
+                tags.append({"product_id": i, "tag_id": tag})
+
+
+        category_builder.bulk_create(categories)
         meta_builder.bulk_create(metas)
+        tag_builder.bulk_create(tags)

@@ -26,7 +26,7 @@ Full-fledge e-commerce solution in masonite.
 - [x] Products
 - [x] Custom Attributes
 - [x] Categories
-- [ ] Tags
+- [x] Tags
 - [ ] Reviews
 - [x] Comments
 - [ ] Cart
