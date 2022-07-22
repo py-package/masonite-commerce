@@ -2,7 +2,7 @@
 from masoniteorm import Factory
 import random
 from masonite.facades import Hash
-
+from src.masonite_commerce.models.CommerceAttribute import CommerceAttribute
 from src.masonite_commerce.models.CommerceCategory import CommerceCategory
 from src.masonite_commerce.models.CommerceProduct import CommerceProduct
 from src.masonite_commerce.models.CommerceComment import CommerceComment
@@ -37,6 +37,14 @@ def tag_factory(faker):
     }
 
 
+def attribute_factory(faker):
+    title = " ".join(faker.words(3))
+    return {
+        'title': title,
+        'status': random.choice(['draft', 'published', 'archived']),
+    }
+
+
 def product_factory(faker):
     title = " ".join(faker.words(2))
     return {
@@ -61,6 +69,7 @@ def comment_factory(faker):
 
 Factory.register(User, user_factory)
 Factory.register(CommerceCategory, category_factory)
+Factory.register(CommerceTag, tag_factory)
+Factory.register(CommerceAttribute, attribute_factory)
 Factory.register(CommerceProduct, product_factory)
 Factory.register(CommerceComment, comment_factory)
-Factory.register(CommerceTag, tag_factory)
