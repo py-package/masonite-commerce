@@ -29,7 +29,7 @@ Full-fledge e-commerce solution in masonite.
 - [x] Tags
 - [ ] Reviews
 - [x] Comments
-- [ ] Cart
+- [x] Cart
 - [ ] Checkout
 - [ ] Order
 - [ ] Payment
