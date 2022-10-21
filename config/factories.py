@@ -4,6 +4,7 @@ import random
 from masonite.facades import Hash
 from src.masonite_commerce.models.CommerceAttribute import CommerceAttribute
 from src.masonite_commerce.models.CommerceCategory import CommerceCategory
+from src.masonite_commerce.models.CommerceCustomer import CommerceCustomer
 from src.masonite_commerce.models.CommerceProduct import CommerceProduct
 from src.masonite_commerce.models.CommerceComment import CommerceComment
 from src.masonite_commerce.models.CommerceTag import CommerceTag
@@ -11,6 +12,14 @@ from tests.integrations.app.models.User import User
 
 
 def user_factory(faker):
+    return {
+        "name": faker.unique.name(),
+        "email": faker.unique.email(),
+        "password": Hash.make("secret"),
+        "phone": faker.phone_number(),
+    }
+
+def customer_factory(faker):
     return {
         "name": faker.unique.name(),
         "email": faker.unique.email(),
@@ -68,6 +77,7 @@ def comment_factory(faker):
 
 
 Factory.register(User, user_factory)
+Factory.register(CommerceCustomer, customer_factory)
 Factory.register(CommerceCategory, category_factory)
 Factory.register(CommerceTag, tag_factory)
 Factory.register(CommerceAttribute, attribute_factory)

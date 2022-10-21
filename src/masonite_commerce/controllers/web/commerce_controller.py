@@ -2,6 +2,8 @@ from masonite.controllers import Controller
 from masonite.request import Request
 from masonite.response import Response
 from masonite.views import View
+from masonite.configuration import config
+from src.masonite_commerce.models.CommerceCart import CommerceCart
 from ...commerce import Commerce
 from masoniteorm.query import QueryBuilder
 from ...models.CommerceProduct import CommerceProduct
@@ -16,9 +18,9 @@ class CommerceController(Controller):
         self.manager = Commerce()
 
     def index(self, view: View):
-        QueryBuilder().table("users").select("id", "name", "email").all().serialize()
-        CommerceProduct.with_("categories", "meta").all()
-        CommerceCategory.with_("products").all()
+        # QueryBuilder().table("users").select("id", "name", "email").all().serialize()
+        # CommerceProduct.with_("categories", "meta").all()
+        # CommerceCategory.with_("products").all()
         return view.render("masonite-commerce:index", {})
 
     def products(self, view: View):
@@ -28,7 +30,7 @@ class CommerceController(Controller):
         comment_query = JoinClause("commerce_comments as comments").on(
             "comments.product_id", "=", "commerce_products.id"
         )
-        meta_query = JoinClause("commerce_metas as metas").on(
+        meta_query = JoinClause("commerce_product_meta as metas").on(
             "metas.product_id", "=", "commerce_products.id"
         )
 
@@ -36,10 +38,10 @@ class CommerceController(Controller):
             CommerceProduct.select_raw(
                 """
                 commerce_products.*,
-                CONVERT(metas.price, FLOAT) as price,
-                CONVERT(metas.average_rating, FLOAT) as avg_rating,
+                CAST(metas.price AS DECIMAL(10, 2)) AS price,
+                CAST(metas.average_rating AS FLOAT) AS avg_rating,
+                CAST(metas.stock_quantity AS UNSIGNED) AS quantity,
                 metas.stock_status,
-                CONVERT(metas.stock_quantity, UNSIGNED) as quantity,
                 count(comments.id) as total_comments
             """
             )
@@ -60,7 +62,7 @@ class CommerceController(Controller):
         comment_query = JoinClause("commerce_comments as comments").on(
             "comments.product_id", "=", "commerce_products.id"
         )
-        meta_query = JoinClause("commerce_metas as metas").on(
+        meta_query = JoinClause("commerce_product_meta as metas").on(
             "metas.product_id", "=", "commerce_products.id"
         )
 
@@ -68,10 +70,10 @@ class CommerceController(Controller):
             CommerceProduct.select_raw(
                 """
                 commerce_products.*,
-                CONVERT(metas.price, FLOAT) as price,
-                CONVERT(metas.average_rating, FLOAT) as avg_rating,
+                CAST(metas.price AS DECIMAL(10, 2)) AS price,
+                CAST(metas.average_rating AS FLOAT) AS avg_rating,
+                CAST(metas.stock_quantity AS UNSIGNED) AS quantity,
                 metas.stock_status,
-                CONVERT(metas.stock_quantity, UNSIGNED) as quantity,
                 count(comments.id) as total_comments
             """
             )

@@ -13,9 +13,18 @@
                 <div class="flex-1 p-4">
                     <h3 class="text-xl font-bold">{{ product.title }}</h3>
                     <p class="text-gray-700 text-base">{{ product.excerpt }}</p>
-                    <p class="text-gray-700 text-base">{{ product.price }}</p>
+                    <p class="text-red-700 font-semibold text-sm">Rs. {{ product.price }}</p>
                     <a href="/commerce/products/{{product.slug}}"
-                        class="px-3 py-2 text-white bg-black mt-4 inline-block">View Product</a>
+                        class="px-3 py-2 text-black text-sm bg-gray-100 hover:border mt-4 inline-block rounded">View
+                        Product</a>
+                    <form method="post" action="/commerce/carts">
+                        {{ csrf_field }}
+                        {{ back() }}
+                        <input type="hidden" name="product_id" value="{{product.id}}" />
+                        <input type="hidden" name="quantity" value="1" />
+                        <button type="submit" class="px-3 py-2 text-white rounded bg-black mt-4 inline-block">Add
+                            To Cart</button>
+                    </form>
                 </div>
             </div>
         </div>
