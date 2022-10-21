@@ -44,7 +44,6 @@ class ProductTableSeeder(Seeder):
             for tag in random_tags:
                 tags.append({"product_id": i, "tag_id": tag})
 
-
         category_builder.bulk_create(categories)
         meta_builder.bulk_create(metas)
         tag_builder.bulk_create(tags)
