@@ -9,4 +9,5 @@ class CommerceController(Controller):
         self.request = request
 
     def index(self):
+        is_ajax = self.request.is_ajax()
         return self.response.json({"message": "Hello Masonite Commerce!"})
