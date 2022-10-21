@@ -14,3 +14,4 @@ ENDPOINT = {
     "web": "/commerce",
 }
 MIDDLEWARE = ["web"]  # list of middleware to apply to the route
+CART_LIMIT = 3

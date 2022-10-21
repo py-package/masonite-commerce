@@ -12,7 +12,7 @@ class CommerceComment(Model):
     __fillable__ = ["creator_id", "product_id", "parent_id", "content", "status"]
 
     @belongs_to("product_id", "id")
-    def products(self):
+    def product(self):
         """Returns related product for this comment."""
         from ..models.CommerceProduct import CommerceProduct
 

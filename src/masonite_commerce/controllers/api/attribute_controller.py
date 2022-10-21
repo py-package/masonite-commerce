@@ -7,54 +7,51 @@ from src.masonite_commerce.constants.http_status_codes import (
     STATUS_DELETED,
     STATUS_UPDATED,
 )
-from ...models.CommerceCategory import CommerceCategory
-from ...queries.category_query import CategoryQuery
+from ...models.CommerceAttribute import CommerceAttribute
 
 
-class CategoryController(Controller):
+class AttributeController(Controller):
     def __init__(self, response: Response, request: Request) -> None:
         self.response = response
         self.request = request
 
     def index(self):
-        """Returns a list of categories"""
-
-        return CategoryQuery().include("children").null("parent_id").desc("id").paginate()
+        """Returns a list of attributes"""
 
         per_page = int(self.request.input("per-page", 10))
         page = int(self.request.input("page", 1))
 
-        return CommerceCategory.with_("children").where_null("parent_id").paginate(per_page, page)
+        return CommerceAttribute.paginate(per_page, page)
 
     def show(self, id):
-        """Returns a single category"""
+        """Returns a single attribute"""
 
-        return CommerceCategory.find(id)
+        return CommerceAttribute.find(id)
 
     def store(self):
-        """Creates a new category"""
+        """Creates a new attribute"""
 
-        category = CommerceCategory.create(self.request.all())
+        attribute = CommerceAttribute.create(self.request.all())
 
         return self.response.json(
-            {"category": category.serialize(), "message": "Category created successfully"},
+            {"attribute": attribute.serialize(), "message": "Category created successfully"},
             status=STATUS_CREATED,
         )
 
     def update(self, id):
-        """Updates a category"""
+        """Updates a attribute"""
 
-        category = CommerceCategory.find(id)
-        category.update(self.request.all())
+        attribute = CommerceAttribute.find(id)
+        attribute.update(self.request.all())
 
         return self.response.json(
             {"message": "Category updated successfully"}, status=STATUS_UPDATED
         )
 
     def destroy(self, id):
-        """Deletes a category"""
-        category = CommerceCategory.find(id)
-        category.delete()
+        """Deletes a attribute"""
+        attribute = CommerceAttribute.find(id)
+        attribute.delete()
 
         return self.response.json(
             {"message": "Category deleted successfully"}, status=STATUS_DELETED
