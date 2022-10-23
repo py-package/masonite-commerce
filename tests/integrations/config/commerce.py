@@ -10,8 +10,8 @@
 """
 
 ENDPOINT = {
-    "api": "/commerce/api/v1",
-    "web": "/commerce",
+    "api": "/api/v1",
+    "web": "/",
 }
 MIDDLEWARE = ['web']  # list of middleware to apply to the route
 CART_LIMIT = 3

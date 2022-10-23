@@ -20,7 +20,6 @@ class TagController(Controller):
 
         per_page = int(self.request.input("per-page", 10))
         page = int(self.request.input("page", 1))
-
         return CommerceTag.paginate(per_page, page)
 
     def show(self, id):
@@ -32,7 +31,6 @@ class TagController(Controller):
         """Creates a new tag"""
 
         tag = CommerceTag.create(self.request.all())
-
         return self.response.json(
             {"tag": tag.serialize(), "message": "Tag created successfully"},
             status=STATUS_CREATED,
@@ -43,12 +41,11 @@ class TagController(Controller):
 
         tag = CommerceTag.find(id)
         tag.update(self.request.all())
-
         return self.response.json({"message": "Tag updated successfully"}, status=STATUS_UPDATED)
 
     def destroy(self, id):
         """Deletes a tag"""
+        
         tag = CommerceTag.find(id)
         tag.delete()
-
         return self.response.json({"message": "Tag deleted successfully"}, status=STATUS_DELETED)
