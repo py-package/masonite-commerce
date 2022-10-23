@@ -45,7 +45,7 @@ class AttributeController(Controller):
         attribute.update(self.request.all())
 
         return self.response.json(
-            {"message": "Category updated successfully"}, status=STATUS_UPDATED
+            {"message": "Attribute updated successfully"}, status=STATUS_UPDATED
         )
 
     def destroy(self, id):
@@ -54,5 +54,5 @@ class AttributeController(Controller):
         attribute.delete()
 
         return self.response.json(
-            {"message": "Category deleted successfully"}, status=STATUS_DELETED
+            {"message": "Attribute deleted successfully"}, status=STATUS_DELETED
         )

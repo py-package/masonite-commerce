@@ -1,6 +1,7 @@
 from masonite.routes import Route
 from masonite.configuration import config
 
+from src.masonite_commerce.controllers.api.attribute_controller import AttributeController
 from src.masonite_commerce.controllers.api.cart_controller import CartController
 from src.masonite_commerce.controllers.api.category_controller import CategoryController
 from src.masonite_commerce.controllers.api.product_controller import ProductController
@@ -29,6 +30,11 @@ ROUTES = Route.group(
         Route.post("/carts", CartController.store),
         Route.put("/carts/@id", CartController.update),
         Route.delete("/carts/@id", CartController.destroy),
+        # Attribute Routes
+        Route.get("/attributes", AttributeController.index),
+        Route.post("/attributes", AttributeController.store),
+        Route.put("/attributes/@id", AttributeController.update),
+        Route.delete("/attributes/@id", AttributeController.destroy),
     ],
     prefix="" if endpoint == "/" else endpoint,
     middleware=config("commerce.middleware", default=["web"]),
