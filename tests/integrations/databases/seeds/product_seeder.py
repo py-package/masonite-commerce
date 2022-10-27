@@ -14,7 +14,7 @@ class ProductTableSeeder(Seeder):
         """Run the database seeds."""
         Factory(CommerceProduct, 200).create()
         category_builder = QueryBuilder().table("commerce_category_product")
-        meta_builder = QueryBuilder().table("commerce_product_meta")
+        meta_builder = QueryBuilder().table("commerce_metas")
         tag_builder = QueryBuilder().table("commerce_product_tag")
         attribute_builder = QueryBuilder().table("commerce_product_attribute")
 
@@ -44,6 +44,7 @@ class ProductTableSeeder(Seeder):
                 "average_rating": random.randint(1, 5),
                 "total_sales": random.randint(1, 1000),
             })
+            
             for category in random_categories:
                 categories.append({"product_id": i, "category_id": category})
 

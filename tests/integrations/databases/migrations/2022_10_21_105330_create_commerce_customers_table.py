@@ -1,9 +1,9 @@
-"""CreateCustomersTable Migration."""
+"""CreateCommerceCustomersTable Migration."""
 
 from masoniteorm.migrations import Migration
 
 
-class CreateCustomersTable(Migration):
+class CreateCommerceCustomersTable(Migration):
     def up(self):
         """
         Run the migrations.

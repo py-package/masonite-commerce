@@ -21,7 +21,7 @@ class ProductController(Controller):
         comment_query = JoinClause("commerce_comments as comments", clause="left").on(
             "comments.product_id", "=", "commerce_products.id"
         )
-        meta_query = JoinClause("commerce_product_meta as metas", clause="left").on(
+        meta_query = JoinClause("commerce_metas as metas", clause="left").on(
             "metas.product_id", "=", "commerce_products.id"
         )
 
@@ -52,7 +52,7 @@ class ProductController(Controller):
         comment_query = JoinClause("commerce_comments as comments", clause="left").on(
             "comments.product_id", "=", "commerce_products.id"
         )
-        meta_query = JoinClause("commerce_product_meta as metas", clause="left").on(
+        meta_query = JoinClause("commerce_metas as metas", clause="left").on(
             "metas.product_id", "=", "commerce_products.id"
         )
 

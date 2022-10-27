@@ -30,7 +30,7 @@ class CartController(Controller):
             "comments.product_id", "=", "commerce_products.id"
         )
 
-        meta_query = JoinClause("commerce_product_meta as metas").on(
+        meta_query = JoinClause("commerce_metas as metas").on(
             "metas.product_id", "=", "commerce_products.id"
         )
 
@@ -59,7 +59,7 @@ class CartController(Controller):
         quantity = int(self.request.input("quantity", 1))
         customer_id = 1
 
-        meta_query = JoinClause("commerce_product_meta as metas").on(
+        meta_query = JoinClause("commerce_metas as metas").on(
             "metas.product_id", "=", "commerce_products.id"
         )
 
@@ -113,7 +113,7 @@ class CartController(Controller):
         quantity = int(self.request.input("quantity", 1))
         customer_id = 1
 
-        meta_query = JoinClause("commerce_product_meta as metas").on(
+        meta_query = JoinClause("commerce_metas as metas").on(
             "metas.product_id", "=", "commerce_products.id"
         )
 

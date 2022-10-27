@@ -6,6 +6,7 @@ from src.masonite_commerce.controllers.api.cart_controller import CartController
 from src.masonite_commerce.controllers.api.category_controller import CategoryController
 from src.masonite_commerce.controllers.api.product_controller import ProductController
 from src.masonite_commerce.controllers.api.tag_controller import TagController
+from src.masonite_commerce.controllers.api.comment_controller import CommentController
 
 endpoint = config("commerce.endpoint.api", default="")
 
@@ -15,6 +16,10 @@ ROUTES = Route.group(
         Route.get("/products", ProductController.index),
         Route.get("/products/@id:int", ProductController.show),
         Route.get("/products/@id:int/comments", ProductController.comments),
+        # Comment Routes
+        Route.get("/comments", CommentController.index),
+        Route.post("/comments", CommentController.store),
+        Route.delete("/comments/@id", CommentController.destroy),
         # Category Routes
         Route.get("/categories", CategoryController.index),
         Route.post("/categories", CategoryController.store),

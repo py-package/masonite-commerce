@@ -6,7 +6,7 @@ from masoniteorm.relationships import belongs_to
 class CommerceProductMeta(Model):
     """CommerceProductMeta Model."""
 
-    __table__ = "commerce_product_meta"
+    __table__ = "commerce_metas"
     __primary_key__ = "id"
 
     __fillable__ = [
@@ -30,5 +30,4 @@ class CommerceProductMeta(Model):
     def product(self):
         """Returns the product for this meta."""
         from .CommerceProduct import CommerceProduct
-
         return CommerceProduct
