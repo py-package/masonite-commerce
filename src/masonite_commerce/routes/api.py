@@ -19,7 +19,7 @@ ROUTES = Route.group(
         # Comment Routes
         Route.get("/comments", CommentController.index),
         Route.post("/comments", CommentController.store),
-        Route.delete("/comments/@id", CommentController.destroy),
+        Route.delete("/comments/@id:int", CommentController.destroy),
         # Category Routes
         Route.get("/categories", CategoryController.index),
         Route.post("/categories", CategoryController.store),

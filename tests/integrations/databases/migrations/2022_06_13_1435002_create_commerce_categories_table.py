@@ -17,7 +17,7 @@ class CreateCommerceCategoriesTable(Migration):
             table.foreign("parent_id").references("id").on("commerce_categories").on_delete("set null")
             table.string("title")
             table.string("slug")
-            table.string("status", 12)  # draft, published, archived
+            table.string("status", 12).default("draft")  # draft, published, archived
             table.timestamps()
 
     def down(self):
