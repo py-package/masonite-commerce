@@ -34,7 +34,7 @@ class TagController(Controller):
             return self.response.json({
                 "message": "Data validation failed",
                 "errors": errors.all()
-            })
+            }, status=STATUS_UNPROCESSABLE)
 
         try:
             data = self.request.only("title", "slug")
@@ -58,7 +58,7 @@ class TagController(Controller):
             return self.response.json({
                 "message": "Data validation failed",
                 "errors": errors.all()
-            })
+            }, status=STATUS_UNPROCESSABLE)
 
         try:
             data = self.request.only("title", "slug")

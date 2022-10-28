@@ -62,7 +62,7 @@ class CartController(Controller):
             return self.response.json({
                 "message": "Data validation failed",
                 "errors": errors.all()
-            })
+            }, status=STATUS_UNPROCESSABLE)
 
         try:
             customer_id = 1
@@ -136,7 +136,7 @@ class CartController(Controller):
             return self.response.json({
                 "message": "Data validation failed",
                 "errors": errors.all()
-            })
+            }, status=STATUS_UNPROCESSABLE)
 
         try:
             customer_id = 1

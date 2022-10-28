@@ -13,6 +13,9 @@ class BaseQuery:
 
         self.query = None
 
+    def select_raw(self, raw):
+        return self.query.select_raw(raw)
+
     def include(self, *relationships):
         self.query.with_(*relationships)
         return self

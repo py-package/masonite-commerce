@@ -37,7 +37,7 @@ class CategoryController(Controller):
             return self.response.json({
                 "message": "Data validation failed",
                 "errors": errors.all()
-            })
+            }, status=STATUS_UNPROCESSABLE)
 
         try:
             data = self.request.only("parent_id", "title", "slug", "status")
@@ -66,7 +66,7 @@ class CategoryController(Controller):
             return self.response.json({
                 "message": "Data validation failed",
                 "errors": errors.all()
-            })
+            }, status=STATUS_UNPROCESSABLE)
 
         try:
             data = self.request.only("parent_id", "title", "slug", "status")

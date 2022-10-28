@@ -35,7 +35,7 @@ class AttributeController(Controller):
             return self.response.json({
                 "message": "Data validation failed",
                 "errors": errors.all()
-            })
+            }, status=STATUS_UNPROCESSABLE)
 
         try:
             data = self.request.only("title", "status")
@@ -59,7 +59,7 @@ class AttributeController(Controller):
             return self.response.json({
                 "message": "Data validation failed",
                 "errors": errors.all()
-            })
+            }, status=STATUS_UNPROCESSABLE)
 
         try:
             data = self.request.only("title", "status")

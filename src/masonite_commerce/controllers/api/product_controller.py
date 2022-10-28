@@ -3,7 +3,7 @@ from masonite.request import Request
 from masonite.response import Response
 
 from src.masonite_commerce.models.CommerceComment import CommerceComment
-from ...models.CommerceProduct import CommerceProduct
+from src.masonite_commerce.models.CommerceProduct import CommerceProduct
 from masoniteorm.expressions import JoinClause
 
 
