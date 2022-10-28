@@ -39,7 +39,7 @@ Full-fledge e-commerce solution in masonite.
 
 ---
 
-- [-] Product API
+- [ ] Product API
 - [x] Category API
 - [x] Tag API
 - [x] Cart API
