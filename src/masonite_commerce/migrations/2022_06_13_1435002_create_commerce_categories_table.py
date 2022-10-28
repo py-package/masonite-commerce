@@ -14,9 +14,7 @@ class CreateCommerceCategoriesTable(Migration):
             table.integer("creator_id").unsigned().nullable()
             table.foreign("creator_id").references("id").on("users").on_delete("set null")
             table.integer("parent_id").unsigned().nullable()
-            table.foreign("parent_id").references("id").on("commerce_categories").on_delete(
-                "set null"
-            )
+            table.foreign("parent_id").references("id").on("commerce_categories").on_delete("set null")
             table.string("title")
             table.string("slug")
             table.string("status", 12)  # draft, published, archived

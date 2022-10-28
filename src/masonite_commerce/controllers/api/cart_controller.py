@@ -1,21 +1,28 @@
 from masonite.controllers import Controller
 from masonite.request import Request
 from masonite.response import Response
-from masonite.views import View
 from masonite.configuration import config
+
+from src.masonite_commerce.constants.http_status_codes import (
+    STATUS_CREATED,
+    STATUS_DELETED,
+    STATUS_UPDATED,
+    STATUS_UNPROCESSABLE
+)
 from src.masonite_commerce.models.CommerceCart import CommerceCart
-from src.masonite_commerce.commerce import Commerce
-from src.masonite_commerce.models.CommerceProduct import CommerceProduct
 from masoniteorm.expressions import JoinClause
+
+from src.masonite_commerce.models.CommerceProduct import CommerceProduct
 
 
 class CartController(Controller):
     def __init__(self, response: Response, request: Request) -> None:
         self.response = response
         self.request = request
-        self.manager = Commerce()
 
-    def index(self, view: View):
+    def index(self):
+        """Returns a list of tags"""
+
         per_page = int(self.request.input("per-page", 10))
         page = int(self.request.input("page", 1))
 
@@ -43,9 +50,11 @@ class CartController(Controller):
             .group_by("comments.product_id, metas.id")
         }, "customer").paginate(per_page, page)
 
-        return view.render("masonite-commerce:carts/index", {"carts": carts})
+        return carts
 
     def store(self):
+        """Creates a new cart"""
+
         product_id = self.request.input("product_id")
         quantity = int(self.request.input("quantity", 1))
         customer_id = 1
@@ -70,7 +79,9 @@ class CartController(Controller):
             .first()
         )
         if not product:
-            return self.response.back().with_errors("Product out of stock!")
+            return self.response.json({
+                "message": "Product out of stock!",
+            }, status=STATUS_UNPROCESSABLE)
 
         if product.stock_status == "instock":
             cart = CommerceCart.where(
@@ -85,13 +96,20 @@ class CartController(Controller):
                 if cart_limit == 0 or cart_limit > cart.quantity:
                     cart.update({"quantity": cart.quantity + quantity})
                 else:
-                    return self.response.back().with_errors("Cart limit is reached!")
+                    return self.response.json({
+                        "message": "Cart limit is reached!",
+                    }, status=STATUS_UNPROCESSABLE)
 
-            return self.response.back().with_success("Item added to cart!")
+            return self.response.json({
+                "message": "Item added to cart!"
+            }, status=STATUS_CREATED)
 
-        return self.response.back().with_errors("Product out of stock!")
+        return self.response.json({
+            "message": "Product out of stock!",
+        }, status=STATUS_UNPROCESSABLE)
 
-    def update(self, cart_id):
+    def update(self, id):
+        """Updates a cart"""
         quantity = int(self.request.input("quantity", 1))
         customer_id = 1
 
@@ -116,15 +134,17 @@ class CartController(Controller):
             .join(meta_query)
             .join(cart_query)
             .group_by("metas.id")
-            .where("carts.id", "=", cart_id)
+            .where("carts.id", "=", id)
             .first()
         )
         if not product:
-            return self.response.back().with_errors("Product out of stock!")
+            return self.response.json({
+                "message": "Product out of stock!",
+            }, status=STATUS_UNPROCESSABLE)
 
         if product.stock_status == "instock":
             cart = CommerceCart.where(
-                {"id": cart_id, "customer_id": customer_id}
+                {"id": id, "customer_id": customer_id}
             ).first()
             if not cart:
                 cart = CommerceCart.create(
@@ -135,17 +155,27 @@ class CartController(Controller):
                 if cart_limit == 0 or cart_limit > quantity:
                     cart.update({"quantity": quantity})
                 else:
-                    return self.response.back().with_errors("Cart limit is reached!")
+                    return self.response.json({
+                        "message": "Cart limit is reached!",
+                    }, status=STATUS_UNPROCESSABLE)
 
-            return self.response.back().with_success("Item added to cart!")
+            return self.response.json({
+                "message": "Cart updated!"
+            }, status=STATUS_UPDATED)
 
-        return self.response.back().with_errors("Product out of stock!")
+        return self.response.json({
+            "message": "Product out of stock!",
+        }, status=STATUS_UNPROCESSABLE)
 
-    def destroy(self, cart_id):
-        cart = CommerceCart.find(cart_id)
+    def destroy(self, id):
+        cart = CommerceCart.find(id)
         if not cart:
-            return self.response.back().with_errors("Cart not found!")
+            return self.response.json({
+                "message": "Cart not found!"
+            })
 
         cart.delete()
 
-        return self.response.back().with_success("Cart deleted!")
+        return self.response.json({
+            "message": "Cart deleted!"
+        }, status=STATUS_DELETED)

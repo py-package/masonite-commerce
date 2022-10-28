@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<div class="h-screen flex flex-col items-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {% for cart in carts %}
+        <div class="bg-white rounded-lg shadow-lg p-4">
+            <div class="flex flex-col">
+                <div class="flex-1">
+                    <img src="{{ cart.product.image }}" alt="{{ cart.product.name }}" class="w-full">
+                </div>
+                <div class="flex-1 p-4">
+                    <h5>Customer: {{ cart.customer.name }}</h5>
+                    <h3 class="text-xl font-bold">{{ cart.product.title }}</h3>
+                    <p class="text-gray-700 text-base">{{ cart.product.excerpt }}</p>
+                    <p class="text-red-700 font-semibold text-sm">Rs. {{ cart.product.price }}</p>
+                    <form method="post" action="/commerce/carts/{{cart.id}}">
+                        {{ csrf_field }}
+                        {{ back() }}
+                        <input type="number" step="1" name="quantity" value="{{ cart.quantity }}" />
+                        <button type="submit" class="px-3 py-2 text-white rounded bg-black mt-4 inline-block">
+                            Update Cart
+                        </button>
+                    </form>
+                    <form method="delete" action="/commerce/carts/{{cart.id}}">
+                        {{ csrf_field }}
+                        {{ back() }}
+                        <input type="hidden" name="quantity" value="1" />
+                        <button type="submit" class="px-3 py-2 text-white rounded bg-black mt-4 inline-block">
+                            Delete Cart
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

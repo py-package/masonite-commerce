@@ -9,7 +9,7 @@ class CreateCommerceMetasTable(Migration):
         """
         Run the migrations.
         """
-        with self.schema.create("commerce_product_meta") as table:
+        with self.schema.create("commerce_metas") as table:
             table.increments("id")
             table.integer("product_id").unsigned()
             table.foreign("product_id").references("id").on("commerce_products").on_delete(
@@ -34,4 +34,4 @@ class CreateCommerceMetasTable(Migration):
         """
         Revert the migrations.
         """
-        self.schema.drop("commerce_product_meta")
+        self.schema.drop("commerce_metas")

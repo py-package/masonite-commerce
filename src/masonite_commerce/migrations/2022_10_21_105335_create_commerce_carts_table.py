@@ -1,10 +1,10 @@
 # flake8: noqa F501
-"""CreateCartsTable Migration."""
+"""CreateCommerceCartsTable Migration."""
 
 from masoniteorm.migrations import Migration
 
 
-class CreateCartsTable(Migration):
+class CreateCommerceCartsTable(Migration):
     def up(self):
         """
         Run the migrations.

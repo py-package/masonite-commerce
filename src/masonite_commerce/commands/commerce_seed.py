@@ -34,7 +34,7 @@ class CommerceSeed(Command):
         QueryBuilder().table("users").where_in("email", ["john@doe.com", "jane@doe.com"]).delete()
         QueryBuilder().table("commerce_products").truncate(True)
         QueryBuilder().table("commerce_categories").truncate(True)
-        QueryBuilder().table("commerce_product_meta").truncate(True)
+        QueryBuilder().table("commerce_metas").truncate(True)
         QueryBuilder().table("commerce_attributes").truncate(True)
         QueryBuilder().table("commerce_product_attribute").truncate(True)
         QueryBuilder().table("commerce_comments").truncate(True)
@@ -147,7 +147,7 @@ class CommerceSeed(Command):
                 }
             )
 
-        QueryBuilder().table("commerce_product_meta").bulk_create(metas)
+        QueryBuilder().table("commerce_metas").bulk_create(metas)
 
     def seed_attributes(self):
         """Seed Attribute Data"""
