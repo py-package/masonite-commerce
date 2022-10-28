@@ -13,6 +13,7 @@ from src.masonite_commerce.models.CommerceCart import CommerceCart
 from masoniteorm.expressions import JoinClause
 
 from src.masonite_commerce.models.CommerceProduct import CommerceProduct
+from src.masonite_commerce.validators.cart_rule import CartRule
 
 
 class CartController(Controller):
@@ -55,127 +56,157 @@ class CartController(Controller):
     def store(self):
         """Creates a new cart"""
 
-        product_id = self.request.input("product_id")
-        quantity = int(self.request.input("quantity", 1))
-        customer_id = 1
+        errors = self.request.validate(CartRule)
 
-        meta_query = JoinClause("commerce_metas as metas").on(
-            "metas.product_id", "=", "commerce_products.id"
-        )
+        if errors:
+            return self.response.json({
+                "message": "Data validation failed",
+                "errors": errors.all()
+            })
 
-        product = (
-            CommerceProduct.select_raw(
-                """
-                commerce_products.*,
-                CAST(metas.price AS DECIMAL(10, 2)) AS price,
-                CAST(metas.average_rating AS FLOAT) AS avg_rating,
-                CAST(metas.stock_quantity AS UNSIGNED) AS quantity,
-                metas.stock_status
-            """
+        try:
+            customer_id = 1
+
+            data = self.request.only("product_id", "quantity")
+
+            data.update({
+                "customer_id": customer_id,
+                "quantity": int(data.get("quantity", 1))
+            })
+
+            meta_query = JoinClause("commerce_metas as metas").on(
+                "metas.product_id", "=", "commerce_products.id"
             )
-            .join(meta_query)
-            .group_by("metas.id")
-            .where("commerce_products.id", "=", product_id)
-            .first()
-        )
-        if not product:
+
+            product = (
+                CommerceProduct.select_raw(
+                    """
+                    commerce_products.*,
+                    CAST(metas.price AS DECIMAL(10, 2)) AS price,
+                    CAST(metas.average_rating AS FLOAT) AS avg_rating,
+                    CAST(metas.stock_quantity AS UNSIGNED) AS quantity,
+                    metas.stock_status
+                """
+                )
+                .join(meta_query)
+                .group_by("metas.id")
+                .where("commerce_products.id", "=", data.get("product_id"))
+                .first()
+            )
+            if not product:
+                return self.response.json({
+                    "message": "Product out of stock!",
+                }, status=STATUS_UNPROCESSABLE)
+
+            if product.stock_status == "instock":
+                cart = CommerceCart.where(
+                    {"product_id": data.get("product_id"), "customer_id": customer_id}
+                ).first()
+                if not cart:
+                    cart = CommerceCart.create(
+                        {"product_id": product.id, "customer_id": customer_id, "quantity": data.get("quantity")}
+                    )
+                else:
+                    cart_limit = config("commerce.cart_limit", 0)
+                    if cart_limit == 0 or cart_limit > cart.quantity:
+                        cart.update({"quantity": cart.quantity + data.get("quantity")})
+                    else:
+                        return self.response.json({
+                            "message": "Cart limit is reached!",
+                        }, status=STATUS_UNPROCESSABLE)
+
+                return self.response.json({
+                    "message": "Item added to cart!"
+                }, status=STATUS_CREATED)
+
             return self.response.json({
                 "message": "Product out of stock!",
             }, status=STATUS_UNPROCESSABLE)
-
-        if product.stock_status == "instock":
-            cart = CommerceCart.where(
-                {"product_id": product_id, "customer_id": customer_id}
-            ).first()
-            if not cart:
-                cart = CommerceCart.create(
-                    {"product_id": product.id, "customer_id": customer_id, "quantity": quantity}
-                )
-            else:
-                cart_limit = config("commerce.cart_limit", 0)
-                if cart_limit == 0 or cart_limit > cart.quantity:
-                    cart.update({"quantity": cart.quantity + quantity})
-                else:
-                    return self.response.json({
-                        "message": "Cart limit is reached!",
-                    }, status=STATUS_UNPROCESSABLE)
-
+        except:
             return self.response.json({
-                "message": "Item added to cart!"
-            }, status=STATUS_CREATED)
-
-        return self.response.json({
-            "message": "Product out of stock!",
-        }, status=STATUS_UNPROCESSABLE)
+                "message": "Unable to create cart",
+            }, status=STATUS_UNPROCESSABLE)
 
     def update(self, id):
         """Updates a cart"""
-        quantity = int(self.request.input("quantity", 1))
-        customer_id = 1
 
-        meta_query = JoinClause("commerce_metas as metas").on(
-            "metas.product_id", "=", "commerce_products.id"
-        )
+        errors = self.request.validate(CartRule)
 
-        cart_query = JoinClause("commerce_carts as carts").on(
-            "carts.product_id", "=", "commerce_products.id"
-        )
-
-        product = (
-            CommerceProduct.select_raw(
-                """
-                commerce_products.*,
-                CAST(metas.price AS DECIMAL(10, 2)) AS price,
-                CAST(metas.average_rating AS FLOAT) AS avg_rating,
-                CAST(metas.stock_quantity AS UNSIGNED) AS quantity,
-                metas.stock_status
-            """
-            )
-            .join(meta_query)
-            .join(cart_query)
-            .group_by("metas.id")
-            .where("carts.id", "=", id)
-            .first()
-        )
-        if not product:
+        if errors:
             return self.response.json({
-                "message": "Product out of stock!",
-            }, status=STATUS_UNPROCESSABLE)
-
-        if product.stock_status == "instock":
-            cart = CommerceCart.where(
-                {"id": id, "customer_id": customer_id}
-            ).first()
-            if not cart:
-                cart = CommerceCart.create(
-                    {"product_id": product.id, "customer_id": customer_id, "quantity": quantity}
-                )
-            else:
-                cart_limit = config("commerce.cart_limit", 0)
-                if cart_limit == 0 or cart_limit > quantity:
-                    cart.update({"quantity": quantity})
-                else:
-                    return self.response.json({
-                        "message": "Cart limit is reached!",
-                    }, status=STATUS_UNPROCESSABLE)
-
-            return self.response.json({
-                "message": "Cart updated!"
-            }, status=STATUS_UPDATED)
-
-        return self.response.json({
-            "message": "Product out of stock!",
-        }, status=STATUS_UNPROCESSABLE)
-
-    def destroy(self, id):
-        cart = CommerceCart.find(id)
-        if not cart:
-            return self.response.json({
-                "message": "Cart not found!"
+                "message": "Data validation failed",
+                "errors": errors.all()
             })
 
-        cart.delete()
+        try:
+            customer_id = 1
 
+            data = self.request.only("product_id", "quantity")
+
+            data.update({
+                "customer_id": customer_id,
+                "quantity": int(data.get("quantity", 1))
+            })
+
+            meta_query = JoinClause("commerce_metas as metas").on(
+                "metas.product_id", "=", "commerce_products.id"
+            )
+
+            cart_query = JoinClause("commerce_carts as carts").on(
+                "carts.product_id", "=", "commerce_products.id"
+            )
+
+            product = (
+                CommerceProduct.select_raw(
+                    """
+                    commerce_products.*,
+                    CAST(metas.price AS DECIMAL(10, 2)) AS price,
+                    CAST(metas.average_rating AS FLOAT) AS avg_rating,
+                    CAST(metas.stock_quantity AS UNSIGNED) AS quantity,
+                    metas.stock_status
+                """
+                )
+                .join(meta_query)
+                .join(cart_query)
+                .group_by("metas.id")
+                .where("carts.id", "=", id)
+                .first()
+            )
+
+            if not product:
+                return self.response.json({
+                    "message": "Product out of stock",
+                }, status=STATUS_UNPROCESSABLE)
+
+            if product.stock_status == "instock":
+                cart = CommerceCart.where(
+                    {"id": id, "customer_id": customer_id}
+                ).first()
+                if not cart:
+                    cart = CommerceCart.create(data)
+                else:
+                    cart_limit = config("commerce.cart_limit", 0)
+                    if cart_limit == 0 or cart_limit > data.get("quantity"):
+                        cart.update({"quantity": data.get("quantity")})
+                    else:
+                        return self.response.json({
+                            "message": "Cart limit is reached",
+                        }, status=STATUS_UNPROCESSABLE)
+
+                return self.response.json({
+                    "message": "Cart updated"
+                }, status=STATUS_UPDATED)
+
+            return self.response.json({
+                "message": "Product out of stock",
+            }, status=STATUS_UNPROCESSABLE)
+        except:
+            return self.response.json({
+                "message": "Unable to update cart",
+            }, status=STATUS_UNPROCESSABLE)
+
+    def destroy(self, id):
+        CommerceCart.where("id", "=", id).delete()
         return self.response.json({
             "message": "Cart deleted!"
         }, status=STATUS_DELETED)

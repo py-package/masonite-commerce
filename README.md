@@ -27,8 +27,7 @@ Full-fledge e-commerce solution in masonite.
 - [x] Custom Attributes
 - [x] Categories
 - [x] Tags
-- [x] Comments
-- [x] Reviews
+- [x] Comments and Reviews
 - [x] Cart
 - [ ] Checkout
 - [ ] Order
@@ -37,6 +36,23 @@ Full-fledge e-commerce solution in masonite.
 - [ ] Tax
 - [ ] Coupons
 - [ ] Custom Reporting and Analytics
+
+---
+
+- [-] Product API
+- [x] Category API
+- [x] Tag API
+- [x] Cart API
+- [x] Custom Attribute API
+- [ ] Comment and Review API
+- [ ] Checkout API
+- [ ] Order API
+- [ ] Payment API
+- [ ] Shipping API
+- [ ] Tax API
+- [ ] Coupon API
+- [ ] Reporting API
+- [ ] API Validations
 
 **Database Design (v1)**
 ![Database Design (v1)](https://github.com/yubarajshrestha/masonite-commerce/blob/master/docs/masonite_commerce.png?raw=true)

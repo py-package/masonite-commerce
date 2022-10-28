@@ -5,9 +5,12 @@ from masonite.response import Response
 from src.masonite_commerce.constants.http_status_codes import (
     STATUS_CREATED,
     STATUS_DELETED,
+    STATUS_NOT_FOUND,
+    STATUS_UNPROCESSABLE,
     STATUS_UPDATED,
 )
-from ...models.CommerceAttribute import CommerceAttribute
+from src.masonite_commerce.models.CommerceAttribute import CommerceAttribute
+from src.masonite_commerce.validators.attribute_rule import AttributeRule
 
 
 class AttributeController(Controller):
@@ -23,35 +26,61 @@ class AttributeController(Controller):
 
         return CommerceAttribute.paginate(per_page, page)
 
-    def show(self, id):
-        """Returns a single attribute"""
-
-        return CommerceAttribute.find(id)
-
     def store(self):
         """Creates a new attribute"""
 
-        attribute = CommerceAttribute.create(self.request.all())
+        errors = self.request.validate(AttributeRule)
 
-        return self.response.json(
-            {"attribute": attribute.serialize(), "message": "Category created successfully"},
-            status=STATUS_CREATED,
-        )
+        if errors:
+            return self.response.json({
+                "message": "Data validation failed",
+                "errors": errors.all()
+            })
+
+        try:
+            data = self.request.only("title", "status")
+            attribute = CommerceAttribute.create(data)
+
+            return self.response.json({
+                "attribute": attribute.serialize(),
+                "message": "Attribute created successfully"
+            }, status=STATUS_CREATED)
+        except:
+            return self.response.json({
+                "message": "Unable to create attribute",
+            }, status=STATUS_UNPROCESSABLE)
 
     def update(self, id):
         """Updates a attribute"""
 
-        attribute = CommerceAttribute.find(id)
-        attribute.update(self.request.all())
+        errors = self.request.validate(AttributeRule)
 
-        return self.response.json(
-            {"message": "Attribute updated successfully"}, status=STATUS_UPDATED
-        )
+        if errors:
+            return self.response.json({
+                "message": "Data validation failed",
+                "errors": errors.all()
+            })
+
+        try:
+            data = self.request.only("title", "status")
+            attribute = CommerceAttribute.find(id)
+            if not attribute:
+                return self.response.json({
+                    "message": "Unable to find attribute",
+                }, status=STATUS_NOT_FOUND)
+
+            attribute.update(data)
+            return self.response.json(
+                {"message": "Attribute updated successfully"}, status=STATUS_UPDATED
+            )
+        except:
+            return self.response.json({
+                "message": "Unable to update attribute",
+            }, status=STATUS_UNPROCESSABLE)
 
     def destroy(self, id):
         """Deletes a attribute"""
-        attribute = CommerceAttribute.find(id)
-        attribute.delete()
+        CommerceAttribute.where("id", "=", id).delete()
 
         return self.response.json(
             {"message": "Attribute deleted successfully"}, status=STATUS_DELETED
