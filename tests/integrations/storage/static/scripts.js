@@ -24,12 +24,29 @@ document.addEventListener('alpine:init', () => {
             let data = new FormData();
             data.append('product_id', product.id);
             data.append('quantity', 1);
-            const response = await fetch('/api/v1/carts', {
+            await fetch('/api/v1/carts', {
                 method: 'post',
                 body: data
             })
-            await response.json()
             this.fetchAllCarts();
         },
+
+        async updateCart(cart) {
+            let data = new FormData();
+            data.append('product_id', cart.product.id);
+            data.append('quantity', cart.quantity);
+            await fetch(`/api/v1/carts/${cart.id}`, {
+                method: 'put',
+                body: data
+            })
+            this.fetchAllCarts();
+        },
+
+        async deleteCart(cart) {
+            await fetch(`/api/v1/carts/${cart.id}`, {
+                method: 'delete'
+            })
+            this.fetchAllCarts()
+        }
     }))
 })

@@ -178,15 +178,27 @@ class CartController(Controller):
                     "message": "Product out of stock",
                 }, status=STATUS_UNPROCESSABLE)
 
+            cart = CommerceCart.where(
+                {"id": id, "customer_id": customer_id}
+            ).first()
+
+            if int(data.get("quantity")) < 1:
+                cart.delete()
+                return self.response.json({
+                    "message": "Cart deleted successfully",
+                }, status=STATUS_DELETED)
+
             if product.stock_status == "instock":
-                cart = CommerceCart.where(
-                    {"id": id, "customer_id": customer_id}
-                ).first()
+                cart_limit = config("commerce.cart_limit", 0)
                 if not cart:
-                    cart = CommerceCart.create(data)
+                    if cart_limit > data.get("quantity"):
+                        return self.response.json({
+                            "message": "Cart limit is reached",
+                        }, status=STATUS_UNPROCESSABLE)
+                    else:
+                        CommerceCart.create(data)
                 else:
-                    cart_limit = config("commerce.cart_limit", 0)
-                    if cart_limit == 0 or cart_limit > data.get("quantity"):
+                    if cart_limit == 0 or cart_limit >= data.get("quantity"):
                         cart.update({"quantity": data.get("quantity")})
                     else:
                         return self.response.json({

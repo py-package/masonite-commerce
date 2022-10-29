@@ -46,21 +46,22 @@
 
             <div class="pl-3 inline-block no-underline hover:text-black cursor-pointer relative"
                 x-data="{dropdownMenu: false}">
-                <svg @click="dropdownMenu = ! dropdownMenu" class="fill-current hover:text-black relative"
+                <svg x-on:click="dropdownMenu = ! dropdownMenu" class="fill-current hover:text-black relative"
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                     <path
                         d="M21,7H7.462L5.91,3.586C5.748,3.229,5.392,3,5,3H2v2h2.356L9.09,15.414C9.252,15.771,9.608,16,10,16h8 c0.4,0,0.762-0.238,0.919-0.606l3-7c0.133-0.309,0.101-0.663-0.084-0.944C21.649,7.169,21.336,7,21,7z M17.341,14h-6.697L8.371,9 h11.112L17.341,14z" />
                     <circle cx="10.5" cy="18.5" r="1.5" />
                     <circle cx="17.5" cy="18.5" r="1.5" />
-                    <span @click="dropdownMenu = ! dropdownMenu" x-show="carts.length > 0"
+                    <span x-on:click="dropdownMenu = ! dropdownMenu" x-show="carts.length > 0"
                         class="absolute -top-2 -right-2 w-5 h-5 text-xs bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center"
                         x-text="carts.length"></span>
                 </svg>
-                <div x-show="!dropdownMenu"
-                    class="absolute right-0 py-4 px-2 mt-2 bg-white bg-gray-100 rounded-md shadow-xl z-10"
-                    style="width: 480px!important">
+                <div x-show="dropdownMenu"
+                    class="absolute right-0 py-4 px-2 mt-2 bg-white bg-gray-100 rounded-md shadow-xl"
+                    style="width: 480px!important; z-index: 35;">
                     <div class="flow-root">
-                        <ul role="list" class="-my-6 divide-y divide-gray-200">
+                        <span x-show="carts.length == 0">No items found in cart.</span>
+                        <ul role="list" class="divide-y divide-gray-200">
                             <template x-for="cart in carts">
                                 <li class="flex py-6">
                                     <div
@@ -74,16 +75,17 @@
                                         <div>
                                             <div class="flex justify-between text-base font-medium text-gray-900">
                                                 <span x-text="cart.product.title"></span>
-                                                <p class="ml-4" x-text="`\$${cart.product.price}`"></p>
+                                                <p class="ml-4" x-text="`\$${cart.product.price * cart.quantity}`"></p>
                                             </div>
                                         </div>
                                         <div class="flex flex-1 items-end justify-between text-sm">
                                             <p class="text-gray-500">Qty <input type="number" x-model="cart.quantity"
-                                                    class="border-0 hover:outline-none hover:border">
+                                                    x-on:change="updateCart(cart)"
+                                                    class="border-0 hover:outline-none hover:border w-12" min="1">
                                             </p>
 
                                             <div class="flex">
-                                                <button type="button"
+                                                <button x-on:click="deleteCart(cart)" type="button"
                                                     class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
                                             </div>
                                         </div>
