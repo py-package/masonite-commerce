@@ -44,10 +44,11 @@ class TagController(Controller):
                 {"tag": tag.serialize(), "message": "Tag created successfully"},
                 status=STATUS_CREATED,
             )
-        except:
+        except Exception as e:
             return self.response.json(
                 {
                     "message": "Unable to create tag",
+                    "error": e.message,
                 },
                 status=STATUS_UNPROCESSABLE,
             )
@@ -78,11 +79,9 @@ class TagController(Controller):
             return self.response.json(
                 {"message": "Tag updated successfully"}, status=STATUS_UPDATED
             )
-        except:
+        except Exception as e:
             return self.response.json(
-                {
-                    "message": "Unable to update tag",
-                },
+                {"message": "Unable to update tag", "error": e.message},
                 status=STATUS_UNPROCESSABLE,
             )
 

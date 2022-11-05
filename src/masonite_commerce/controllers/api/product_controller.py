@@ -1,3 +1,4 @@
+# flake8: noqa F401
 from masonite.controllers import Controller
 from masonite.request import Request
 from masonite.response import Response
@@ -12,10 +13,8 @@ from masoniteorm.expressions import JoinClause
 from src.masonite_commerce.validators.product_rule import ProductRule
 from src.masonite_commerce.constants.http_status_codes import (
     STATUS_CREATED,
-    STATUS_DELETED,
     STATUS_NOT_FOUND,
     STATUS_UNPROCESSABLE,
-    STATUS_UPDATED,
 )
 
 
@@ -206,9 +205,11 @@ class ProductController(Controller):
                 status=STATUS_CREATED,
             )
         except Exception as e:
-            print(e)
             return self.response.json(
-                {"message": "Data validation failed", "errors": errors.all()},
+                {
+                    "message": "Data validation failed",
+                    "error": e.message,
+                },
                 status=STATUS_UNPROCESSABLE,
             )
 

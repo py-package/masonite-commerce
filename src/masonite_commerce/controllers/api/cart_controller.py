@@ -135,10 +135,11 @@ class CartController(Controller):
                 },
                 status=STATUS_UNPROCESSABLE,
             )
-        except:
+        except Exception as e:
             return self.response.json(
                 {
                     "message": "Unable to create cart",
+                    "error": e.message,
                 },
                 status=STATUS_UNPROCESSABLE,
             )
@@ -236,11 +237,9 @@ class CartController(Controller):
                 },
                 status=STATUS_UNPROCESSABLE,
             )
-        except:
+        except Exception as e:
             return self.response.json(
-                {
-                    "message": "Unable to update cart",
-                },
+                {"message": "Unable to update cart", "error": e.message},
                 status=STATUS_UNPROCESSABLE,
             )
 

@@ -45,10 +45,11 @@ class AttributeController(Controller):
                 {"attribute": attribute.serialize(), "message": "Attribute created successfully"},
                 status=STATUS_CREATED,
             )
-        except:
+        except Exception as e:
             return self.response.json(
                 {
                     "message": "Unable to create attribute",
+                    "error": e.message,
                 },
                 status=STATUS_UNPROCESSABLE,
             )
@@ -79,11 +80,9 @@ class AttributeController(Controller):
             return self.response.json(
                 {"message": "Attribute updated successfully"}, status=STATUS_UPDATED
             )
-        except:
+        except Exception as e:
             return self.response.json(
-                {
-                    "message": "Unable to update attribute",
-                },
+                {"message": "Unable to update attribute", "error": e.message},
                 status=STATUS_UNPROCESSABLE,
             )
 

@@ -1,4 +1,4 @@
-from masonite.validation import RuleEnclosure, required, is_in, is_list, when
+from masonite.validation import RuleEnclosure, required, is_in
 
 
 class ProductRule(RuleEnclosure):

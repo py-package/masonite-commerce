@@ -55,10 +55,11 @@ class CategoryController(Controller):
                 {"category": category.serialize(), "message": "Category created successfully"},
                 status=STATUS_CREATED,
             )
-        except:
+        except Exception as e:
             return self.response.json(
                 {
                     "message": "Unable to create category",
+                    "error": e.message,
                 },
                 status=STATUS_UNPROCESSABLE,
             )
@@ -89,11 +90,9 @@ class CategoryController(Controller):
             return self.response.json(
                 {"message": "Category updated successfully"}, status=STATUS_UPDATED
             )
-        except:
+        except Exception as e:
             return self.response.json(
-                {
-                    "message": "Unable to update category",
-                },
+                {"message": "Unable to update category", "error": e.message},
                 status=STATUS_UNPROCESSABLE,
             )
 

@@ -1,8 +1,6 @@
 """A WelcomeController Module."""
 from masonite.views import View
 from masonite.controllers import Controller
-from masoniteorm.expressions import JoinClause
-from src.masonite_commerce.queries.product_query import ProductQuery
 
 
 class WelcomeController(Controller):
@@ -37,5 +35,4 @@ class WelcomeController(Controller):
         #     .group_by("metas.id, commerce_products.id")
         #     .paginate(8, 1)
         # )
-        
         return view.render("commerce")
