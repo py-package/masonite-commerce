@@ -31,23 +31,26 @@ class TagController(Controller):
         errors = self.request.validate(TagRule)
 
         if errors:
-            return self.response.json({
-                "message": "Data validation failed",
-                "errors": errors.all()
-            }, status=STATUS_UNPROCESSABLE)
+            return self.response.json(
+                {"message": "Data validation failed", "errors": errors.all()},
+                status=STATUS_UNPROCESSABLE,
+            )
 
         try:
             data = self.request.only("title", "slug")
             tag = CommerceTag.create(data)
 
-            return self.response.json({
-                "tag": tag.serialize(),
-                "message": "Tag created successfully"
-            }, status=STATUS_CREATED)
+            return self.response.json(
+                {"tag": tag.serialize(), "message": "Tag created successfully"},
+                status=STATUS_CREATED,
+            )
         except:
-            return self.response.json({
-                "message": "Unable to create tag",
-            }, status=STATUS_UNPROCESSABLE)
+            return self.response.json(
+                {
+                    "message": "Unable to create tag",
+                },
+                status=STATUS_UNPROCESSABLE,
+            )
 
     def update(self, id):
         """Updates a tag"""
@@ -55,33 +58,37 @@ class TagController(Controller):
         errors = self.request.validate(TagRule)
 
         if errors:
-            return self.response.json({
-                "message": "Data validation failed",
-                "errors": errors.all()
-            }, status=STATUS_UNPROCESSABLE)
+            return self.response.json(
+                {"message": "Data validation failed", "errors": errors.all()},
+                status=STATUS_UNPROCESSABLE,
+            )
 
         try:
             data = self.request.only("title", "slug")
             tag = CommerceTag.find(id)
             if not tag:
-                return self.response.json({
-                    "message": "Unable to find tag",
-                }, status=STATUS_NOT_FOUND)
+                return self.response.json(
+                    {
+                        "message": "Unable to find tag",
+                    },
+                    status=STATUS_NOT_FOUND,
+                )
 
             tag.update(data)
             return self.response.json(
                 {"message": "Tag updated successfully"}, status=STATUS_UPDATED
             )
         except:
-            return self.response.json({
-                "message": "Unable to update tag",
-            }, status=STATUS_UNPROCESSABLE)
+            return self.response.json(
+                {
+                    "message": "Unable to update tag",
+                },
+                status=STATUS_UNPROCESSABLE,
+            )
 
     def destroy(self, id):
         """Deletes a tag"""
-        
+
         CommerceTag.where("id", "=", id).delete()
 
-        return self.response.json(
-            {"message": "Tag deleted successfully"}, status=STATUS_DELETED
-        )
+        return self.response.json({"message": "Tag deleted successfully"}, status=STATUS_DELETED)

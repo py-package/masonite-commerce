@@ -12,9 +12,13 @@ class CreateCommerceCartsTable(Migration):
         with self.schema.create("commerce_carts") as table:
             table.increments("id")
             table.integer("product_id").unsigned()
-            table.foreign("product_id").references("id").on("commerce_products").on_delete("cascade")
+            table.foreign("product_id").references("id").on("commerce_products").on_delete(
+                "cascade"
+            )
             table.integer("customer_id").unsigned()
-            table.foreign("customer_id").references("id").on("commerce_customers").on_delete("cascade")
+            table.foreign("customer_id").references("id").on("commerce_customers").on_delete(
+                "cascade"
+            )
             table.integer("quantity").default(1)
             table.timestamps()
 

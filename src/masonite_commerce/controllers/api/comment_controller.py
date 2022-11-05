@@ -25,15 +25,11 @@ class CommentController(Controller):
             return CommerceComment.paginate(per_page, page)
         return CommerceComment.where("product_id", "=", product_id).paginate(per_page, page)
 
-
     def store(self):
         """Creates a new comment"""
 
         data = self.request.only("product_id", "star", "comment")
-        data.update({
-            "creator_id": self.request.user().id,
-            "status": "pending"
-        })
+        data.update({"creator_id": self.request.user().id, "status": "pending"})
         comment = CommerceComment.create(data)
 
         return self.response.json(

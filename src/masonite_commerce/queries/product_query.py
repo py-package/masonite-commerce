@@ -7,4 +7,3 @@ class ProductQuery(BaseQuery):
         super().__init__()
 
         self.query = CommerceProduct().get_builder()
-

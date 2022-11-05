@@ -14,7 +14,9 @@ class CreateCommerceCommentsTable(Migration):
             table.integer("creator_id").unsigned().nullable()
             table.foreign("creator_id").references("id").on("users").on_delete("set null")
             table.integer("product_id").unsigned()
-            table.foreign("product_id").references("id").on("commerce_products").on_delete("cascade")
+            table.foreign("product_id").references("id").on("commerce_products").on_delete(
+                "cascade"
+            )
             table.integer("star").default(0)
             table.text("content")
             table.string("status", 12)  # pending, approved, spam

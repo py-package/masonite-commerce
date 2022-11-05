@@ -27,9 +27,10 @@ class CartController(Controller):
             "metas.product_id", "=", "commerce_products.id"
         )
 
-        carts = CommerceCart.with_({
-            "product": lambda q: q.select_raw(
-                """
+        carts = CommerceCart.with_(
+            {
+                "product": lambda q: q.select_raw(
+                    """
                     commerce_products.*,
                     CAST(metas.price AS DECIMAL(10, 2)) AS price,
                     CAST(metas.average_rating AS FLOAT) AS avg_rating,
@@ -37,11 +38,13 @@ class CartController(Controller):
                     metas.stock_status,
                     count(comments.id) as total_comments
                 """
-            )
-            .join(comment_query)
-            .join(meta_query)
-            .group_by("comments.product_id, metas.id")
-        }, "customer").paginate(per_page, page)
+                )
+                .join(comment_query)
+                .join(meta_query)
+                .group_by("comments.product_id, metas.id")
+            },
+            "customer",
+        ).paginate(per_page, page)
 
         return view.render("masonite-commerce:carts/index", {"carts": carts})
 
@@ -123,9 +126,7 @@ class CartController(Controller):
             return self.response.back().with_errors("Product out of stock!")
 
         if product.stock_status == "instock":
-            cart = CommerceCart.where(
-                {"id": cart_id, "customer_id": customer_id}
-            ).first()
+            cart = CommerceCart.where({"id": cart_id, "customer_id": customer_id}).first()
             if not cart:
                 cart = CommerceCart.create(
                     {"product_id": product.id, "customer_id": customer_id, "quantity": quantity}

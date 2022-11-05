@@ -32,23 +32,26 @@ class AttributeController(Controller):
         errors = self.request.validate(AttributeRule)
 
         if errors:
-            return self.response.json({
-                "message": "Data validation failed",
-                "errors": errors.all()
-            }, status=STATUS_UNPROCESSABLE)
+            return self.response.json(
+                {"message": "Data validation failed", "errors": errors.all()},
+                status=STATUS_UNPROCESSABLE,
+            )
 
         try:
             data = self.request.only("title", "status")
             attribute = CommerceAttribute.create(data)
 
-            return self.response.json({
-                "attribute": attribute.serialize(),
-                "message": "Attribute created successfully"
-            }, status=STATUS_CREATED)
+            return self.response.json(
+                {"attribute": attribute.serialize(), "message": "Attribute created successfully"},
+                status=STATUS_CREATED,
+            )
         except:
-            return self.response.json({
-                "message": "Unable to create attribute",
-            }, status=STATUS_UNPROCESSABLE)
+            return self.response.json(
+                {
+                    "message": "Unable to create attribute",
+                },
+                status=STATUS_UNPROCESSABLE,
+            )
 
     def update(self, id):
         """Updates a attribute"""
@@ -56,27 +59,33 @@ class AttributeController(Controller):
         errors = self.request.validate(AttributeRule)
 
         if errors:
-            return self.response.json({
-                "message": "Data validation failed",
-                "errors": errors.all()
-            }, status=STATUS_UNPROCESSABLE)
+            return self.response.json(
+                {"message": "Data validation failed", "errors": errors.all()},
+                status=STATUS_UNPROCESSABLE,
+            )
 
         try:
             data = self.request.only("title", "status")
             attribute = CommerceAttribute.find(id)
             if not attribute:
-                return self.response.json({
-                    "message": "Unable to find attribute",
-                }, status=STATUS_NOT_FOUND)
+                return self.response.json(
+                    {
+                        "message": "Unable to find attribute",
+                    },
+                    status=STATUS_NOT_FOUND,
+                )
 
             attribute.update(data)
             return self.response.json(
                 {"message": "Attribute updated successfully"}, status=STATUS_UPDATED
             )
         except:
-            return self.response.json({
-                "message": "Unable to update attribute",
-            }, status=STATUS_UNPROCESSABLE)
+            return self.response.json(
+                {
+                    "message": "Unable to update attribute",
+                },
+                status=STATUS_UNPROCESSABLE,
+            )
 
     def destroy(self, id):
         """Deletes a attribute"""

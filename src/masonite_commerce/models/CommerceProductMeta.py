@@ -30,4 +30,5 @@ class CommerceProductMeta(Model):
     def product(self):
         """Returns the product for this meta."""
         from .CommerceProduct import CommerceProduct
+
         return CommerceProduct

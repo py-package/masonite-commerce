@@ -15,9 +15,7 @@ class CreateCommerceProductTagTable(Migration):
                 "cascade"
             )
             table.integer("tag_id").unsigned()
-            table.foreign("tag_id").references("id").on("commerce_tags").on_delete(
-                "cascade"
-            )
+            table.foreign("tag_id").references("id").on("commerce_tags").on_delete("cascade")
             table.timestamps()
 
     def down(self):

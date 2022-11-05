@@ -15,4 +15,5 @@ class CommerceCustomer(Model, SoftDeletesMixin):
     def comments(self):
         """Returns all comments."""
         from .CommerceComment import CommerceComment
+
         return CommerceComment
