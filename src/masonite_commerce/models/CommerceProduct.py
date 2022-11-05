@@ -28,14 +28,12 @@ class CommerceProduct(Model):
     def categories(self):
         """Returns all categories for this product."""
         from .CommerceCategory import CommerceCategory
-
         return CommerceCategory
 
     @has_one("product_id", "id")
     def meta(self):
         """Returns all metas for this product."""
         from .CommerceProductMeta import CommerceProductMeta
-
         return CommerceProductMeta
 
     @belongs_to_many(

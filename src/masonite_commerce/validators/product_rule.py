@@ -1,4 +1,4 @@
-from masonite.validation import RuleEnclosure, required, file, is_list
+from masonite.validation import RuleEnclosure, required, is_in, is_list, when
 
 class ProductRule(RuleEnclosure):
 
@@ -6,7 +6,7 @@ class ProductRule(RuleEnclosure):
         """ ... """
         return [
             required([
-                'title', 'slug', 'comment_status', 'status',
+                'title', 'slug',
                 "price", "stock_quantity",
             ], messages={
                 "title": "Product title is required",
@@ -16,10 +16,6 @@ class ProductRule(RuleEnclosure):
                 "price": "Price is required",
                 "stock_quantity": "Stock quantity is required",
             }),
-            is_list(["tags", "categories"], messages={
-                "tags": "Tags must be a list",
-                "categories": "Categories must be a list"
-            })
-
-            # file("cover_image", messages="Cover image is required")
+            is_in("status", ["draft", "published"]),
+            is_in("comment_status", ["open", "closed"]),
         ]
