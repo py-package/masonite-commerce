@@ -5,6 +5,14 @@ from masonite.response import Response
 from src.masonite_commerce.models.CommerceComment import CommerceComment
 from src.masonite_commerce.models.CommerceProduct import CommerceProduct
 from masoniteorm.expressions import JoinClause
+from src.masonite_commerce.validators.product_rule import ProductRule
+from src.masonite_commerce.constants.http_status_codes import (
+    STATUS_CREATED,
+    STATUS_DELETED,
+    STATUS_NOT_FOUND,
+    STATUS_UNPROCESSABLE,
+    STATUS_UPDATED,
+)
 
 
 class ProductController(Controller):
@@ -45,6 +53,33 @@ class ProductController(Controller):
         )
 
         return products
+
+    def store(self):
+        errors = self.request.validate(ProductRule)
+
+        if errors:
+            return self.response.json({
+                "message": "Data validation failed",
+                "errors": errors.all()
+            }, status=STATUS_UNPROCESSABLE)
+
+        try:
+            product_data = self.request.only("title", "slug", "comment_status", "status")
+            category_data = self.request.input("categories", [])
+            tag_data = self.request.input("tags", [])
+            meta_data = self.request.only("sku", "virtual", "downloadable", "price", "min_price", "max_price", "on_sale", "stock_quantity", "stock_status", "tax_status")
+            attribute_data = self.request.input("attributes")
+
+            print(attribute_data)
+            
+            return self.response.json({
+                "message": "Product added successfully"
+            }, status=STATUS_CREATED)
+        except:
+            return self.response.json({
+                "message": "Data validation failed",
+                "errors": errors.all()
+            }, status=STATUS_UNPROCESSABLE)
 
     def show(self, id: int):
         """Returns a single product"""

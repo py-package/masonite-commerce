@@ -14,6 +14,7 @@ ROUTES = Route.group(
     [
         # Product Routes
         Route.get("/products", ProductController.index),
+        Route.post("/products", ProductController.store),
         Route.get("/products/@id:int", ProductController.show),
         Route.get("/products/@id:int/comments", ProductController.comments),
         # Comment Routes
