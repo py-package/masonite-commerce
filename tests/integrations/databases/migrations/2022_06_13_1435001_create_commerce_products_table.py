@@ -14,6 +14,7 @@ class CreateCommerceProductsTable(Migration):
             table.integer("creator_id").unsigned().nullable()
             table.foreign("creator_id").references("id").on("users").on_delete("set null")
             table.string("title")
+            table.string("product_type").default("simple")
             table.string("slug").unique()
             table.text("excerpt").nullable()
             table.text("content").nullable()
