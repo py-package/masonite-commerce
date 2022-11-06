@@ -17,6 +17,8 @@ ROUTES = Route.group(
         Route.post("/products", ProductController.store),
         Route.get("/products/@id:int", ProductController.show),
         Route.put("/products/@id:int", ProductController.update),
+        Route.post("/products/@id:int/variations", ProductController.add_variation),
+        Route.put("/products/@id:int/variations", ProductController.update_variation),
         Route.get("/products/@id:int/comments", ProductController.comments),
         # Comment Routes
         Route.get("/comments", CommentController.index),

@@ -8,6 +8,8 @@ from src.masonite_commerce.models.CommerceProduct import CommerceProduct
 from src.masonite_commerce.models.CommerceCategory import CommerceCategory
 from src.masonite_commerce.models.CommerceTag import CommerceTag
 from src.masonite_commerce.models.CommerceProductMeta import CommerceProductMeta
+from src.masonite_commerce.models.CommerceProductVariation import CommerceProductVariation
+from src.masonite_commerce.models.CommerceProductVariationDetail import CommerceProductVariationDetail
 from masoniteorm.query import QueryBuilder
 from masoniteorm.expressions import JoinClause
 from src.masonite_commerce.validators.product_rule import ProductRule
@@ -49,9 +51,10 @@ class ProductController(Controller):
             )
             .join(comment_query)
             .join(meta_query)
-            .where("commerce_products.status", "=", "published")
-            .where("metas.stock_status", "=", "instock")
-            .group_by("metas.id, commerce_products.id")
+            # .where("commerce_products.status", "=", "published")
+            # .where("metas.stock_status", "=", "instock")
+            .group_by("commerce_products.id, metas.id")
+            .order_by("id")
             .paginate(per_page, page)
         )
 
@@ -213,6 +216,80 @@ class ProductController(Controller):
                 status=STATUS_UNPROCESSABLE,
             )
 
+    def add_variation(self, id: int):
+        # https://youtu.be/KWuc4vITAVY?t=4200 
+        variation_data = self.request.only("sku", "price", "min_price", "max_price", "on_sale", "stock_quantity", "stock_status")
+        product_attributes = self.request.input("product_attributes", None)
+
+        product = CommerceProduct.find(id)
+
+        if not product:
+            return self.response.json({
+                "message": "Product not found",
+            }, status=STATUS_NOT_FOUND)
+
+        if not product_attributes:
+            return self.response.json({
+                "message": "Invalid product attribute"
+            }, status=STATUS_UNPROCESSABLE)
+
+        if type(product_attributes) is not list:
+            product_attributes = [product_attributes]
+
+        variation_data.update({
+            "product_id": product.id
+        })
+
+        variations = CommerceProductVariation.where("product_id", product.id).get().pluck("id").all()
+
+        variation_details = CommerceProductVariationDetail.where_in("product_variation_id", variations).order_by("id").get()
+
+        stored = {}
+
+        for vd in variation_details:
+            if vd.product_variation_id in stored:
+                stored[vd.product_variation_id].append(vd.attribute_value)
+            else:
+                stored.update({
+                    vd.product_variation_id: [vd.attribute_value]
+                })
+        
+        stored = stored.values()
+        passed = []
+
+        for attribute in product_attributes:
+            passed.append(attribute.get('attribute_value'))
+
+        exists = False
+        for s in stored:
+            exists = all(item in passed for item in s) and len(passed) == len(s)
+            if exists:
+                break
+
+        if exists:
+            return self.response.json({
+                "message": "This variation is already added",
+            }, status=STATUS_CREATED)
+        
+        variation = CommerceProductVariation.create(variation_data)
+
+        for pa in product_attributes:
+            pa.update({
+                "product_variation_id": variation.id
+            })
+
+        QueryBuilder().table("commerce_variation_details").bulk_create(product_attributes)
+
+        return self.response.json({
+            "message": "Added product variation",
+        }, status=STATUS_CREATED)
+
+    def update_variation(self, id: int):
+
+        return self.response.json({
+            "message": "Updated product variation"
+        })
+
     def show(self, id: int):
         """Returns a single product"""
 
@@ -226,19 +303,19 @@ class ProductController(Controller):
         product = (
             CommerceProduct.select_raw(
                 """
-                commerce_products.*,
-                cast(coalesce(metas.price, 0) as int) as price,
-                cast(coalesce(metas.average_rating, 0) as int) as avg_rating,
-                metas.stock_status,
-                cast(coalesce(metas.stock_quantity, 0) as int) as quantity,
-                count(comments.id) as total_comments
-            """
+                    commerce_products.*,
+                    cast(coalesce(metas.price, 0) as float) as price,
+                    cast(coalesce(metas.average_rating, 0) as int) as avg_rating,
+                    metas.stock_status,
+                    cast(coalesce(metas.stock_quantity, 0) as int) as quantity,
+                    count(comments.id) as total_comments
+                """
             )
             .join(comment_query)
             .join(meta_query)
             .where("commerce_products.id", "=", id)
-            .with_("meta", "categories", "attributes", "tags")
-            .group_by("comments.product_id, metas.id, commerce_products.id")
+            .with_("meta", "categories", "attributes", "tags", "variations")
+            .group_by("commerce_products.id, metas.id, comments.product_id")
             .first()
         )
 

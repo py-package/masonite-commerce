@@ -1,0 +1,2 @@
+SIMPLE_PRODUCT = "simple"
+VARIABLE_PRODUCT = "variable"

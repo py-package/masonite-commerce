@@ -56,14 +56,18 @@ class CommerceProduct(Model):
         table="commerce_product_tag",
     )
     def tags(self):
-        """Returns all products for this tag."""
+        """Returns all tags for this product."""
         from .CommerceTag import CommerceTag
-
         return CommerceTag
 
-    @has_many
-    def comments(self):
-        """Returns all products for this tag."""
-        from .CommerceComment import CommerceComment
+    @has_many("id", "product_id")
+    def variations(self):
+        """Returns all variations for this product."""
+        from .CommerceProductVariation import CommerceProductVariation
+        return CommerceProductVariation
 
+    @has_many("id", "product_id")
+    def comments(self):
+        """Returns all comments for this product."""
+        from .CommerceComment import CommerceComment
         return CommerceComment
