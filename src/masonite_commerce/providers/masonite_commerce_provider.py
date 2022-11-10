@@ -1,6 +1,7 @@
 """A MasoniteCommerceProvider Service Provider."""
 
 from masonite.packages import PackageProvider
+
 from ..commands import CommerceSeed
 
 

@@ -2,16 +2,10 @@ from masonite.controllers import Controller
 from masonite.request import Request
 from masonite.response import Response
 
-from src.masonite_commerce.constants.http_status_codes import (
-    STATUS_CREATED,
-    STATUS_DELETED,
-    STATUS_NOT_FOUND,
-    STATUS_UNPROCESSABLE,
-    STATUS_UPDATED,
-)
-from src.masonite_commerce.validators.category_rule import CategoryRule
+from src.masonite_commerce.enums.http_status import HttpStatus
 from src.masonite_commerce.models.CommerceCategory import CommerceCategory
 from src.masonite_commerce.queries.category_query import CategoryQuery
+from src.masonite_commerce.validators.category_rule import CategoryRule
 
 
 class CategoryController(Controller):
@@ -40,8 +34,11 @@ class CategoryController(Controller):
 
         if errors:
             return self.response.json(
-                {"message": "Data validation failed", "errors": errors.all()},
-                status=STATUS_UNPROCESSABLE,
+                {
+                    "message": "Data validation failed",
+                    "errors": errors.all(),
+                },
+                status=HttpStatus.UNPROCESSABLE,
             )
 
         try:
@@ -52,8 +49,11 @@ class CategoryController(Controller):
             category = CommerceCategory.create(data)
 
             return self.response.json(
-                {"category": category.serialize(), "message": "Category created successfully"},
-                status=STATUS_CREATED,
+                {
+                    "category": category.serialize(),
+                    "message": "Category created successfully",
+                },
+                status=HttpStatus.CREATED,
             )
         except Exception as e:
             return self.response.json(
@@ -61,7 +61,7 @@ class CategoryController(Controller):
                     "message": "Unable to create category",
                     "error": e.message,
                 },
-                status=STATUS_UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE,
             )
 
     def update(self, id):
@@ -71,8 +71,11 @@ class CategoryController(Controller):
 
         if errors:
             return self.response.json(
-                {"message": "Data validation failed", "errors": errors.all()},
-                status=STATUS_UNPROCESSABLE,
+                {
+                    "message": "Data validation failed",
+                    "errors": errors.all(),
+                },
+                status=HttpStatus.UNPROCESSABLE,
             )
 
         try:
@@ -83,17 +86,23 @@ class CategoryController(Controller):
                     {
                         "message": "Unable to find category",
                     },
-                    status=STATUS_NOT_FOUND,
+                    status=HttpStatus.NOT_FOUND,
                 )
 
             category.update(data)
             return self.response.json(
-                {"message": "Category updated successfully"}, status=STATUS_UPDATED
+                {
+                    "message": "Category updated successfully",
+                },
+                status=HttpStatus.UPDATED,
             )
         except Exception as e:
             return self.response.json(
-                {"message": "Unable to update category", "error": e.message},
-                status=STATUS_UNPROCESSABLE,
+                {
+                    "message": "Unable to update category",
+                    "error": e.message,
+                },
+                status=HttpStatus.UNPROCESSABLE,
             )
 
     def destroy(self, id):
@@ -101,5 +110,8 @@ class CategoryController(Controller):
         CommerceCategory.where("id", "=", id).delete()
 
         return self.response.json(
-            {"message": "Category deleted successfully"}, status=STATUS_DELETED
+            {
+                "message": "Category deleted successfully",
+            },
+            status=HttpStatus.DELETED,
         )

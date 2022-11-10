@@ -1,9 +1,10 @@
 # flake8: noqa: E501
 import random
+
 from faker import Faker
 from masonite.commands import Command
-from masoniteorm.query import QueryBuilder
 from masonite.facades import Hash
+from masoniteorm.query import QueryBuilder
 
 
 class CommerceSeed(Command):

@@ -2,13 +2,7 @@ from masonite.controllers import Controller
 from masonite.request import Request
 from masonite.response import Response
 
-from src.masonite_commerce.constants.http_status_codes import (
-    STATUS_CREATED,
-    STATUS_DELETED,
-    STATUS_NOT_FOUND,
-    STATUS_UNPROCESSABLE,
-    STATUS_UPDATED,
-)
+from src.masonite_commerce.enums.http_status import HttpStatus
 from src.masonite_commerce.models.CommerceTag import CommerceTag
 from src.masonite_commerce.validators.tag_rule import TagRule
 
@@ -32,8 +26,11 @@ class TagController(Controller):
 
         if errors:
             return self.response.json(
-                {"message": "Data validation failed", "errors": errors.all()},
-                status=STATUS_UNPROCESSABLE,
+                {
+                    "message": "Data validation failed",
+                    "errors": errors.all(),
+                },
+                status=HttpStatus.UNPROCESSABLE,
             )
 
         try:
@@ -41,8 +38,11 @@ class TagController(Controller):
             tag = CommerceTag.create(data)
 
             return self.response.json(
-                {"tag": tag.serialize(), "message": "Tag created successfully"},
-                status=STATUS_CREATED,
+                {
+                    "tag": tag.serialize(),
+                    "message": "Tag created successfully",
+                },
+                status=HttpStatus.CREATED,
             )
         except Exception as e:
             return self.response.json(
@@ -50,7 +50,7 @@ class TagController(Controller):
                     "message": "Unable to create tag",
                     "error": e.message,
                 },
-                status=STATUS_UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE,
             )
 
     def update(self, id):
@@ -60,8 +60,11 @@ class TagController(Controller):
 
         if errors:
             return self.response.json(
-                {"message": "Data validation failed", "errors": errors.all()},
-                status=STATUS_UNPROCESSABLE,
+                {
+                    "message": "Data validation failed",
+                    "errors": errors.all(),
+                },
+                status=HttpStatus.UNPROCESSABLE,
             )
 
         try:
@@ -72,17 +75,23 @@ class TagController(Controller):
                     {
                         "message": "Unable to find tag",
                     },
-                    status=STATUS_NOT_FOUND,
+                    status=HttpStatus.NOT_FOUND,
                 )
 
             tag.update(data)
             return self.response.json(
-                {"message": "Tag updated successfully"}, status=STATUS_UPDATED
+                {
+                    "message": "Tag updated successfully",
+                },
+                status=HttpStatus.UPDATED,
             )
         except Exception as e:
             return self.response.json(
-                {"message": "Unable to update tag", "error": e.message},
-                status=STATUS_UNPROCESSABLE,
+                {
+                    "message": "Unable to update tag",
+                    "error": e.message,
+                },
+                status=HttpStatus.UNPROCESSABLE,
             )
 
     def destroy(self, id):
@@ -90,4 +99,9 @@ class TagController(Controller):
 
         CommerceTag.where("id", "=", id).delete()
 
-        return self.response.json({"message": "Tag deleted successfully"}, status=STATUS_DELETED)
+        return self.response.json(
+            {
+                "message": "Tag deleted successfully",
+            },
+            status=HttpStatus.DELETED,
+        )

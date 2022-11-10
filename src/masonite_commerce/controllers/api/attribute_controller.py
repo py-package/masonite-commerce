@@ -2,13 +2,7 @@ from masonite.controllers import Controller
 from masonite.request import Request
 from masonite.response import Response
 
-from src.masonite_commerce.constants.http_status_codes import (
-    STATUS_CREATED,
-    STATUS_DELETED,
-    STATUS_NOT_FOUND,
-    STATUS_UNPROCESSABLE,
-    STATUS_UPDATED,
-)
+from src.masonite_commerce.enums.http_status import HttpStatus
 from src.masonite_commerce.models.CommerceAttribute import CommerceAttribute
 from src.masonite_commerce.validators.attribute_rule import AttributeRule
 
@@ -33,8 +27,11 @@ class AttributeController(Controller):
 
         if errors:
             return self.response.json(
-                {"message": "Data validation failed", "errors": errors.all()},
-                status=STATUS_UNPROCESSABLE,
+                {
+                    "message": "Data validation failed",
+                    "errors": errors.all(),
+                },
+                status=HttpStatus.UNPROCESSABLE,
             )
 
         try:
@@ -42,8 +39,11 @@ class AttributeController(Controller):
             attribute = CommerceAttribute.create(data)
 
             return self.response.json(
-                {"attribute": attribute.serialize(), "message": "Attribute created successfully"},
-                status=STATUS_CREATED,
+                {
+                    "attribute": attribute.serialize(),
+                    "message": "Attribute created successfully",
+                },
+                status=HttpStatus.CREATED,
             )
         except Exception as e:
             return self.response.json(
@@ -51,7 +51,7 @@ class AttributeController(Controller):
                     "message": "Unable to create attribute",
                     "error": e.message,
                 },
-                status=STATUS_UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE,
             )
 
     def update(self, id):
@@ -61,8 +61,11 @@ class AttributeController(Controller):
 
         if errors:
             return self.response.json(
-                {"message": "Data validation failed", "errors": errors.all()},
-                status=STATUS_UNPROCESSABLE,
+                {
+                    "message": "Data validation failed",
+                    "errors": errors.all(),
+                },
+                status=HttpStatus.UNPROCESSABLE,
             )
 
         try:
@@ -73,17 +76,23 @@ class AttributeController(Controller):
                     {
                         "message": "Unable to find attribute",
                     },
-                    status=STATUS_NOT_FOUND,
+                    status=HttpStatus.NOT_FOUND,
                 )
 
             attribute.update(data)
             return self.response.json(
-                {"message": "Attribute updated successfully"}, status=STATUS_UPDATED
+                {
+                    "message": "Attribute updated successfully",
+                },
+                status=HttpStatus.UPDATED,
             )
         except Exception as e:
             return self.response.json(
-                {"message": "Unable to update attribute", "error": e.message},
-                status=STATUS_UNPROCESSABLE,
+                {
+                    "message": "Unable to update attribute",
+                    "error": e.message,
+                },
+                status=HttpStatus.UNPROCESSABLE,
             )
 
     def destroy(self, id):
@@ -91,5 +100,8 @@ class AttributeController(Controller):
         CommerceAttribute.where("id", "=", id).delete()
 
         return self.response.json(
-            {"message": "Attribute deleted successfully"}, status=STATUS_DELETED
+            {
+                "message": "Attribute deleted successfully",
+            },
+            status=HttpStatus.DELETED,
         )

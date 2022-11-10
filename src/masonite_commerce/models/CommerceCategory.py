@@ -1,6 +1,6 @@
 """CommerceCategory Model."""
 from masoniteorm.models import Model
-from masoniteorm.relationships import belongs_to_many, has_many, belongs_to
+from masoniteorm.relationships import belongs_to, belongs_to_many, has_many
 
 
 class CommerceCategory(Model):

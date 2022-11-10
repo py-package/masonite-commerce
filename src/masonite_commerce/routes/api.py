@@ -1,12 +1,14 @@
-from masonite.routes import Route
 from masonite.configuration import config
+from masonite.routes import Route
 
-from src.masonite_commerce.controllers.api.attribute_controller import AttributeController
+from src.masonite_commerce.controllers.api.attribute_controller import (
+    AttributeController,
+)
 from src.masonite_commerce.controllers.api.cart_controller import CartController
 from src.masonite_commerce.controllers.api.category_controller import CategoryController
+from src.masonite_commerce.controllers.api.comment_controller import CommentController
 from src.masonite_commerce.controllers.api.product_controller import ProductController
 from src.masonite_commerce.controllers.api.tag_controller import TagController
-from src.masonite_commerce.controllers.api.comment_controller import CommentController
 
 endpoint = config("commerce.endpoint.api", default="")
 

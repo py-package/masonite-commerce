@@ -2,9 +2,10 @@ from masonite.controllers import Controller
 from masonite.request import Request
 from masonite.response import Response
 from masonite.views import View
+from masoniteorm.expressions import JoinClause
+
 from ...commerce import Commerce
 from ...models.CommerceProduct import CommerceProduct
-from masoniteorm.expressions import JoinClause
 
 
 class ProductController(Controller):

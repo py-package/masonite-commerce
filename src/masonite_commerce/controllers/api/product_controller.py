@@ -2,22 +2,22 @@
 from masonite.controllers import Controller
 from masonite.request import Request
 from masonite.response import Response
+from masoniteorm.expressions import JoinClause
+from masoniteorm.query import QueryBuilder
 
+from src.masonite_commerce.enums.http_status import HttpStatus
+from src.masonite_commerce.models.CommerceCategory import CommerceCategory
 from src.masonite_commerce.models.CommerceComment import CommerceComment
 from src.masonite_commerce.models.CommerceProduct import CommerceProduct
-from src.masonite_commerce.models.CommerceCategory import CommerceCategory
-from src.masonite_commerce.models.CommerceTag import CommerceTag
 from src.masonite_commerce.models.CommerceProductMeta import CommerceProductMeta
-from src.masonite_commerce.models.CommerceProductVariation import CommerceProductVariation
-from src.masonite_commerce.models.CommerceProductVariationDetail import CommerceProductVariationDetail
-from masoniteorm.query import QueryBuilder
-from masoniteorm.expressions import JoinClause
-from src.masonite_commerce.validators.product_rule import ProductRule
-from src.masonite_commerce.constants.http_status_codes import (
-    STATUS_CREATED,
-    STATUS_NOT_FOUND,
-    STATUS_UNPROCESSABLE,
+from src.masonite_commerce.models.CommerceProductVariation import (
+    CommerceProductVariation,
 )
+from src.masonite_commerce.models.CommerceProductVariationDetail import (
+    CommerceProductVariationDetail,
+)
+from src.masonite_commerce.models.CommerceTag import CommerceTag
+from src.masonite_commerce.validators.product_rule import ProductRule
 
 
 class ProductController(Controller):
@@ -66,7 +66,7 @@ class ProductController(Controller):
         if errors:
             return self.response.json(
                 {"message": "Data validation failed", "errors": errors.all()},
-                status=STATUS_UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE,
             )
 
         try:
@@ -121,13 +121,13 @@ class ProductController(Controller):
                 {
                     "message": "Product added successfully",
                 },
-                status=STATUS_CREATED,
+                status=HttpStatus.CREATED,
             )
         except Exception as e:
             print(e)
             return self.response.json(
                 {"message": "Data validation failed", "errors": errors.all()},
-                status=STATUS_UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE,
             )
 
     def update(self, id: int):
@@ -135,8 +135,11 @@ class ProductController(Controller):
 
         if errors:
             return self.response.json(
-                {"message": "Data validation failed", "errors": errors.all()},
-                status=STATUS_UNPROCESSABLE,
+                {
+                    "message": "Data validation failed",
+                    "errors": errors.all(),
+                },
+                status=HttpStatus.UNPROCESSABLE,
             )
 
         try:
@@ -144,8 +147,11 @@ class ProductController(Controller):
 
             if not product:
                 return self.response.json(
-                    {"message": "Product not found", "errors": errors.all()},
-                    status=STATUS_NOT_FOUND,
+                    {
+                        "message": "Product not found",
+                        "errors": errors.all(),
+                    },
+                    status=HttpStatus.NOT_FOUND,
                 )
 
             product_data = self.request.only("title", "slug", "comment_status", "status")
@@ -205,7 +211,7 @@ class ProductController(Controller):
                 {
                     "message": "Product updated successfully",
                 },
-                status=STATUS_CREATED,
+                status=HttpStatus.CREATED,
             )
         except Exception as e:
             return self.response.json(
@@ -213,36 +219,48 @@ class ProductController(Controller):
                     "message": "Data validation failed",
                     "error": e.message,
                 },
-                status=STATUS_UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE,
             )
 
     def add_variation(self, id: int):
-        # https://youtu.be/KWuc4vITAVY?t=4200 
-        variation_data = self.request.only("sku", "price", "min_price", "max_price", "on_sale", "stock_quantity", "stock_status")
+        # https://youtu.be/KWuc4vITAVY?t=4200
+        variation_data = self.request.only(
+            "sku", "price", "min_price", "max_price", "on_sale", "stock_quantity", "stock_status"
+        )
         product_attributes = self.request.input("product_attributes", None)
 
         product = CommerceProduct.find(id)
 
         if not product:
-            return self.response.json({
-                "message": "Product not found",
-            }, status=STATUS_NOT_FOUND)
+            return self.response.json(
+                {
+                    "message": "Product not found",
+                },
+                status=HttpStatus.NOT_FOUND,
+            )
 
         if not product_attributes:
-            return self.response.json({
-                "message": "Invalid product attribute"
-            }, status=STATUS_UNPROCESSABLE)
+            return self.response.json(
+                {
+                    "message": "Invalid product attribute",
+                },
+                status=HttpStatus.UNPROCESSABLE,
+            )
 
         if type(product_attributes) is not list:
             product_attributes = [product_attributes]
 
-        variation_data.update({
-            "product_id": product.id
-        })
+        variation_data.update({"product_id": product.id})
 
-        variations = CommerceProductVariation.where("product_id", product.id).get().pluck("id").all()
+        variations = (
+            CommerceProductVariation.where("product_id", product.id).get().pluck("id").all()
+        )
 
-        variation_details = CommerceProductVariationDetail.where_in("product_variation_id", variations).order_by("id").get()
+        variation_details = (
+            CommerceProductVariationDetail.where_in("product_variation_id", variations)
+            .order_by("id")
+            .get()
+        )
 
         stored = {}
 
@@ -250,15 +268,13 @@ class ProductController(Controller):
             if vd.product_variation_id in stored:
                 stored[vd.product_variation_id].append(vd.attribute_value)
             else:
-                stored.update({
-                    vd.product_variation_id: [vd.attribute_value]
-                })
-        
+                stored.update({vd.product_variation_id: [vd.attribute_value]})
+
         stored = stored.values()
         passed = []
 
         for attribute in product_attributes:
-            passed.append(attribute.get('attribute_value'))
+            passed.append(attribute.get("attribute_value"))
 
         exists = False
         for s in stored:
@@ -267,28 +283,33 @@ class ProductController(Controller):
                 break
 
         if exists:
-            return self.response.json({
-                "message": "This variation is already added",
-            }, status=STATUS_CREATED)
-        
+            return self.response.json(
+                {
+                    "message": "This variation is already added",
+                },
+                status=HttpStatus.CREATED,
+            )
+
         variation = CommerceProductVariation.create(variation_data)
 
         for pa in product_attributes:
-            pa.update({
-                "product_variation_id": variation.id
-            })
+            pa.update({"product_variation_id": variation.id})
 
         QueryBuilder().table("commerce_variation_details").bulk_create(product_attributes)
 
-        return self.response.json({
-            "message": "Added product variation",
-        }, status=STATUS_CREATED)
+        return self.response.json(
+            {
+                "message": "Added product variation",
+            },
+            status=HttpStatus.CREATED,
+        )
 
     def update_variation(self, id: int):
-
-        return self.response.json({
-            "message": "Updated product variation"
-        })
+        return self.response.json(
+            {
+                "message": "Updated product variation",
+            }
+        )
 
     def show(self, id: int):
         """Returns a single product"""
@@ -330,5 +351,4 @@ class ProductController(Controller):
         page = int(self.request.input("page", 1))
 
         comments = CommerceComment.where("product_id", "=", id).paginate(per_page, page)
-
         return comments

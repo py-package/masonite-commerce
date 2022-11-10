@@ -18,6 +18,8 @@ lint: ## Run code linting
 	python -m flake8 .
 format: ## Format code with Black
 	black src
+sort:
+	isort src
 coverage: ## Run package tests and upload coverage reports
 	python -m pytest --cov-report term --cov-report xml --cov=src/masonite/masonite_commerce tests
 publish: ## Publish package to pypi

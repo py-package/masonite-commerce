@@ -20,10 +20,12 @@ class CommerceProductVariationDetail(Model):
     def attribute(self):
         """Returns the attribute."""
         from .CommerceAttribute import CommerceAttribute
+
         return CommerceAttribute
 
     @belongs_to
     def variation(self):
         """Returns the variation."""
         from .CommerceProductVariation import CommerceProductVariation
+
         return CommerceProductVariation

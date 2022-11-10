@@ -1,6 +1,6 @@
 """CommerceProduct Model."""
 from masoniteorm.models import Model
-from masoniteorm.relationships import belongs_to_many, has_one, has_many
+from masoniteorm.relationships import belongs_to_many, has_many, has_one
 
 
 class CommerceProduct(Model):
@@ -58,16 +58,19 @@ class CommerceProduct(Model):
     def tags(self):
         """Returns all tags for this product."""
         from .CommerceTag import CommerceTag
+
         return CommerceTag
 
     @has_many("id", "product_id")
     def variations(self):
         """Returns all variations for this product."""
         from .CommerceProductVariation import CommerceProductVariation
+
         return CommerceProductVariation
 
     @has_many("id", "product_id")
     def comments(self):
         """Returns all comments for this product."""
         from .CommerceComment import CommerceComment
+
         return CommerceComment

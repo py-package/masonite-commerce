@@ -1,7 +1,7 @@
 """CommerceCustomer Model."""
 from masoniteorm.models import Model
-from masoniteorm.scopes import SoftDeletesMixin
 from masoniteorm.relationships import has_many
+from masoniteorm.scopes import SoftDeletesMixin
 
 
 class CommerceCustomer(Model, SoftDeletesMixin):

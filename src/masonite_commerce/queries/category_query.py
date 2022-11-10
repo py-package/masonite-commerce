@@ -1,4 +1,5 @@
 from src.masonite_commerce.models.CommerceCategory import CommerceCategory
+
 from .base_query import BaseQuery
 
 

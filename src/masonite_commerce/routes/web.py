@@ -1,7 +1,8 @@
-from masonite.routes import Route
 from masonite.configuration import config
+from masonite.routes import Route
 
 from src.masonite_commerce.controllers.web.cart_controller import CartController
+
 from ..controllers.web.commerce_controller import CommerceController
 from ..controllers.web.product_controller import ProductController
 

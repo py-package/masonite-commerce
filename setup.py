@@ -74,6 +74,7 @@ setup(
             "flake8",
             "coverage",
             "pytest",
+            "isort",
             "pytest-cov",
             "twine>=1.5.0",
             "wheel",

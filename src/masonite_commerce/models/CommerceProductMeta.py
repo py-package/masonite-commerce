@@ -30,7 +30,7 @@ class CommerceProductMeta(Model):
         "price": "float",
         "min_price": "float",
         "max_price": "float",
-        "average_rating": "float"
+        "average_rating": "float",
     }
 
     @belongs_to

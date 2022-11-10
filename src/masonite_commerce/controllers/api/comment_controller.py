@@ -2,11 +2,8 @@ from masonite.controllers import Controller
 from masonite.request import Request
 from masonite.response import Response
 
-from src.masonite_commerce.constants.http_status_codes import (
-    STATUS_CREATED,
-    STATUS_DELETED,
-)
-from ...models.CommerceComment import CommerceComment
+from src.masonite_commerce.enums.http_status import HttpStatus
+from src.masonite_commerce.models.CommerceComment import CommerceComment
 
 
 class CommentController(Controller):
@@ -33,8 +30,11 @@ class CommentController(Controller):
         comment = CommerceComment.create(data)
 
         return self.response.json(
-            {"comment": comment.serialize(), "message": "Comment added successfully"},
-            status=STATUS_CREATED,
+            {
+                "comment": comment.serialize(),
+                "message": "Comment added successfully",
+            },
+            status=HttpStatus.CREATED,
         )
 
     def destroy(self, id):
@@ -43,5 +43,8 @@ class CommentController(Controller):
         comment.delete()
 
         return self.response.json(
-            {"message": "Comment deleted successfully"}, status=STATUS_DELETED
+            {
+                "message": "Comment deleted successfully",
+            },
+            status=HttpStatus.DELETED,
         )
