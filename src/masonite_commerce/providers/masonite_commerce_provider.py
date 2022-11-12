@@ -12,7 +12,7 @@ class MasoniteCommerceProvider(PackageProvider):
             self.root("masonite_commerce")
             .name("masonite-commerce")
             .config("config/commerce.py", publish=True)
-            .routes("routes/web.py", "routes/api.py")
+            .routes("routes/web.py", "routes/api.py", "routes/dashboard.py")
             .migrations(
                 "migrations/create_commerce_products_table.py",
                 "migrations/create_commerce_categories_table.py",

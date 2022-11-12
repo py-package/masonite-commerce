@@ -14,3 +14,4 @@ dist
 .env
 *.db
 src/masonite_masonite_commerce.egg-info
+node_modules

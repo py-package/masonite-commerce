@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>{% block title %}Masonite Commerce{% endblock %}</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link
+      href="https://unpkg.com/tailwindcss@^3/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    {% block head %}
+    <!-- <link rel="stylesheet" href="/assets/css/app.css"> -->
+    {% endblock %}
+  </head>
+  <body class="h-full w-full">
+    <div class="h-full w-full overflow-hidden flex-row">
+        <nav>Navbar</nav>
+        <aside>Aside</aside>
+        <main>Main</main>
+    </div>
+    {% block content %}{% endblock %}
+    {% block js %}
+    <!-- <script src="/assets/js/app.js"></script> -->
+    {% endblock %}
+  </body>
+</html>
