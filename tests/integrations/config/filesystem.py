@@ -19,6 +19,6 @@ DISKS = {
 STATICFILES = {
     # folder          # template alias
     'tests/integrations/storage/static': 'static/',
-    'tests/integrations/storage/compiled': 'assets/',
+    'src/masonite_commerce/resources': 'assets/',
     'tests/integrations/storage/public': '/',
 }

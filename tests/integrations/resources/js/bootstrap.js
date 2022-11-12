@@ -4,6 +4,8 @@
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
+import Alpine from 'alpinejs'
+window.Alpine = Alpine
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

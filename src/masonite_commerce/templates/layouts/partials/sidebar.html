@@ -1,0 +1,31 @@
+<aside class="w-[320px] shadow-md p-4 flex flex-col">
+    <strong class="block text-center" x-text="title">Masonite Commerce</strong>
+    <div class="mt-4">
+        <nav x-data="{dropdown: false}" class="relative">
+            <button @click="dropdown = !dropdown" class="flex items-center p-2 bg-white w-full bg-gray-100 rounded-md">
+                <span class="mr-4">Categories</span>
+            </button>
+            <div x-show="dropdown" class="py-2 bg-white w-full transition duration-150">
+                <a href="#" class="block px-4 py-1 text-sm hover:bg-gray-100 rounded-md">
+                    All Categories
+                </a>
+                <a href="#" class="block px-4 py-1 text-sm hover:bg-gray-100 rounded-md">
+                    New Category
+                </a>
+            </div>
+        </nav>
+        <nav x-data="{dropdown: false}" class="relative mt-2">
+            <button @click="dropdown = !dropdown" class="flex items-center p-2 bg-white w-full bg-gray-100 rounded-md">
+                <span class="mr-4">Tags</span>
+            </button>
+            <div x-show="dropdown" class="absolute right-0 py-2 bg-white w-full transition duration-150">
+                <a href="#" class="block px-4 py-1 text-sm hover:bg-gray-100 rounded-md">
+                    All Tags
+                </a>
+                <a href="#" class="block px-4 py-1 text-sm hover:bg-gray-100 rounded-md">
+                    New Tag
+                </a>
+            </div>
+        </nav>
+    </div>
+</aside>
