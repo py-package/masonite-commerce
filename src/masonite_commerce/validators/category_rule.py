@@ -9,7 +9,7 @@ class CategoryRule(RuleEnclosure):
                 ["title", "slug"],
                 messages={
                     "title": "Category title is required.",
-                    "slug": "Category slug is required.",
+                    "slug": "Category short name is required.",
                 },
             )
         ]

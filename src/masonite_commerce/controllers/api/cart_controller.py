@@ -61,7 +61,7 @@ class CartController(Controller):
                     "message": "Data validation failed",
                     "errors": errors.all(),
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
         try:
@@ -95,7 +95,7 @@ class CartController(Controller):
                     {
                         "message": "Product out of stock!",
                     },
-                    status=HttpStatus.UNPROCESSABLE,
+                    status=HttpStatus.UNPROCESSABLE.value,
                 )
 
             if product.stock_status == "instock":
@@ -119,18 +119,18 @@ class CartController(Controller):
                             {
                                 "message": "Cart limit is reached!",
                             },
-                            status=HttpStatus.UNPROCESSABLE,
+                            status=HttpStatus.UNPROCESSABLE.value,
                         )
 
                 return self.response.json(
-                    {"message": "Item added to cart!"}, status=HttpStatus.CREATED
+                    {"message": "Item added to cart!"}, status=HttpStatus.CREATED.value
                 )
 
             return self.response.json(
                 {
                     "message": "Product out of stock!",
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
         except Exception as e:
             return self.response.json(
@@ -138,7 +138,7 @@ class CartController(Controller):
                     "message": "Unable to create cart",
                     "error": e.message,
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
     def update(self, id):
@@ -152,7 +152,7 @@ class CartController(Controller):
                     "message": "Data validation failed",
                     "errors": errors.all(),
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
         try:
@@ -192,7 +192,7 @@ class CartController(Controller):
                     {
                         "message": "Product out of stock",
                     },
-                    status=HttpStatus.UNPROCESSABLE,
+                    status=HttpStatus.UNPROCESSABLE.value,
                 )
 
             cart = CommerceCart.where({"id": id, "customer_id": customer_id}).first()
@@ -203,7 +203,7 @@ class CartController(Controller):
                     {
                         "message": "Cart deleted successfully",
                     },
-                    status=HttpStatus.DELETED,
+                    status=HttpStatus.DELETED.value,
                 )
 
             if product.stock_status == "instock":
@@ -214,7 +214,7 @@ class CartController(Controller):
                             {
                                 "message": "Cart limit is reached",
                             },
-                            status=HttpStatus.UNPROCESSABLE,
+                            status=HttpStatus.UNPROCESSABLE.value,
                         )
                     else:
                         CommerceCart.create(data)
@@ -226,21 +226,21 @@ class CartController(Controller):
                             {
                                 "message": "Cart limit is reached",
                             },
-                            status=HttpStatus.UNPROCESSABLE,
+                            status=HttpStatus.UNPROCESSABLE.value,
                         )
 
                 return self.response.json(
                     {
                         "message": "Cart updated",
                     },
-                    status=HttpStatus.UPDATED,
+                    status=HttpStatus.UPDATED.value,
                 )
 
             return self.response.json(
                 {
                     "message": "Product out of stock",
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
         except Exception as e:
             return self.response.json(
@@ -248,7 +248,7 @@ class CartController(Controller):
                     "message": "Unable to update cart",
                     "error": e.message,
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
     def destroy(self, id):
@@ -257,5 +257,5 @@ class CartController(Controller):
             {
                 "message": "Cart deleted!",
             },
-            status=HttpStatus.DELETED,
+            status=HttpStatus.DELETED.value,
         )

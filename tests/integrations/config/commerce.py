@@ -10,7 +10,7 @@
 """
 
 ENDPOINT = {
-    "api": "/commerce/api/v1",
+    "api": "/api/v1",
     "web": "/commerce",
     "dashboard": "/dashboard"
 }

@@ -34,7 +34,7 @@ class CommentController(Controller):
                 "comment": comment.serialize(),
                 "message": "Comment added successfully",
             },
-            status=HttpStatus.CREATED,
+            status=HttpStatus.CREATED.value,
         )
 
     def destroy(self, id):
@@ -46,5 +46,5 @@ class CommentController(Controller):
             {
                 "message": "Comment deleted successfully",
             },
-            status=HttpStatus.DELETED,
+            status=HttpStatus.DELETED.value,
         )

@@ -7,6 +7,7 @@ from src.masonite_commerce.controllers.api.attribute_controller import (
 from src.masonite_commerce.controllers.api.cart_controller import CartController
 from src.masonite_commerce.controllers.api.category_controller import CategoryController
 from src.masonite_commerce.controllers.api.comment_controller import CommentController
+from src.masonite_commerce.controllers.api.customer_controller import CustomerController
 from src.masonite_commerce.controllers.api.product_controller import ProductController
 from src.masonite_commerce.controllers.api.tag_controller import TagController
 
@@ -46,6 +47,9 @@ ROUTES = Route.group(
         Route.post("/attributes", AttributeController.store),
         Route.put("/attributes/@id", AttributeController.update),
         Route.delete("/attributes/@id", AttributeController.destroy),
+        # Customer Routes
+        Route.get("/customers", CustomerController.index),
+        # Order Routes
     ],
     prefix="" if endpoint == "/" else endpoint,
     middleware=config("commerce.middleware", default=["web"]),

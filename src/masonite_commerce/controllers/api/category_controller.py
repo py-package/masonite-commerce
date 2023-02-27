@@ -1,6 +1,8 @@
 from masonite.controllers import Controller
 from masonite.request import Request
 from masonite.response import Response
+from slugify import slugify
+from src.masonite_commerce.enums.category_enum import CategoryStatus
 
 from src.masonite_commerce.enums.http_status import HttpStatus
 from src.masonite_commerce.models.CommerceCategory import CommerceCategory
@@ -19,32 +21,41 @@ class CategoryController(Controller):
         per_page = int(self.request.input("per-page", 10))
         page = int(self.request.input("page", 1))
 
-        return (
+        query = (
             CategoryQuery()
-            .include("children")
-            .null("parent_id")
-            .desc("id")
-            .paginate(per_page, page)
+            .include("parent", "children")
+            .with_count("products")
+            .asc("title")
         )
-        return CommerceCategory.with_("children").where_null("parent_id").paginate(per_page, page)
+
+        if self.request.input("title", None):
+            query.where_title(self.request.input("title", None))
+        
+        if self.request.input("parent_id", None):
+            query.where_parent_id(self.request.input("parent_id", None))
+        
+        return query.paginate(per_page, page)
 
     def store(self):
         """Creates a new category"""
         errors = self.request.validate(CategoryRule)
-
         if errors:
             return self.response.json(
                 {
                     "message": "Data validation failed",
                     "errors": errors.all(),
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
         try:
             data = self.request.only("parent_id", "title", "slug", "status")
 
-            data.update({"creator_id": 1})
+            data.update({
+                "creator_id": 1,
+                "slug": slugify(data.get("slug")),
+                "status": data.get("status") or CategoryStatus.PUBLISHED.value,
+            })
 
             category = CommerceCategory.create(data)
 
@@ -53,15 +64,16 @@ class CategoryController(Controller):
                     "category": category.serialize(),
                     "message": "Category created successfully",
                 },
-                status=HttpStatus.CREATED,
+                status=HttpStatus.CREATED.value,
             )
         except Exception as e:
+            print(e)
             return self.response.json(
                 {
                     "message": "Unable to create category",
-                    "error": e.message,
+                    # "error": e,
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
     def update(self, id):
@@ -75,7 +87,7 @@ class CategoryController(Controller):
                     "message": "Data validation failed",
                     "errors": errors.all(),
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
         try:
@@ -86,7 +98,7 @@ class CategoryController(Controller):
                     {
                         "message": "Unable to find category",
                     },
-                    status=HttpStatus.NOT_FOUND,
+                    status=HttpStatus.NOT_FOUND.value,
                 )
 
             category.update(data)
@@ -94,7 +106,7 @@ class CategoryController(Controller):
                 {
                     "message": "Category updated successfully",
                 },
-                status=HttpStatus.UPDATED,
+                status=HttpStatus.UPDATED.value,
             )
         except Exception as e:
             return self.response.json(
@@ -102,7 +114,7 @@ class CategoryController(Controller):
                     "message": "Unable to update category",
                     "error": e.message,
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
     def destroy(self, id):
@@ -113,5 +125,5 @@ class CategoryController(Controller):
             {
                 "message": "Category deleted successfully",
             },
-            status=HttpStatus.DELETED,
+            status=HttpStatus.DELETED.value,
         )

@@ -49,6 +49,7 @@ class ProductController(Controller):
                 count(comments.id) as total_comments
             """
             )
+            .with_("categories", "tags")
             .join(comment_query)
             .join(meta_query)
             # .where("commerce_products.status", "=", "published")
@@ -66,7 +67,7 @@ class ProductController(Controller):
         if errors:
             return self.response.json(
                 {"message": "Data validation failed", "errors": errors.all()},
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
         try:
@@ -121,13 +122,13 @@ class ProductController(Controller):
                 {
                     "message": "Product added successfully",
                 },
-                status=HttpStatus.CREATED,
+                status=HttpStatus.CREATED.value,
             )
         except Exception as e:
             print(e)
             return self.response.json(
                 {"message": "Data validation failed", "errors": errors.all()},
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
     def update(self, id: int):
@@ -139,7 +140,7 @@ class ProductController(Controller):
                     "message": "Data validation failed",
                     "errors": errors.all(),
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
         try:
@@ -151,7 +152,7 @@ class ProductController(Controller):
                         "message": "Product not found",
                         "errors": errors.all(),
                     },
-                    status=HttpStatus.NOT_FOUND,
+                    status=HttpStatus.NOT_FOUND.value,
                 )
 
             product_data = self.request.only("title", "slug", "comment_status", "status")
@@ -211,7 +212,7 @@ class ProductController(Controller):
                 {
                     "message": "Product updated successfully",
                 },
-                status=HttpStatus.CREATED,
+                status=HttpStatus.CREATED.value,
             )
         except Exception as e:
             return self.response.json(
@@ -219,7 +220,7 @@ class ProductController(Controller):
                     "message": "Data validation failed",
                     "error": e.message,
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
     def add_variation(self, id: int):
@@ -236,7 +237,7 @@ class ProductController(Controller):
                 {
                     "message": "Product not found",
                 },
-                status=HttpStatus.NOT_FOUND,
+                status=HttpStatus.NOT_FOUND.value,
             )
 
         if not product_attributes:
@@ -244,7 +245,7 @@ class ProductController(Controller):
                 {
                     "message": "Invalid product attribute",
                 },
-                status=HttpStatus.UNPROCESSABLE,
+                status=HttpStatus.UNPROCESSABLE.value,
             )
 
         if type(product_attributes) is not list:
@@ -287,7 +288,7 @@ class ProductController(Controller):
                 {
                     "message": "This variation is already added",
                 },
-                status=HttpStatus.CREATED,
+                status=HttpStatus.CREATED.value,
             )
 
         variation = CommerceProductVariation.create(variation_data)
@@ -301,7 +302,7 @@ class ProductController(Controller):
             {
                 "message": "Added product variation",
             },
-            status=HttpStatus.CREATED,
+            status=HttpStatus.CREATED.value,
         )
 
     def update_variation(self, id: int):

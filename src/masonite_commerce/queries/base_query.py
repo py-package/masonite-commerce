@@ -48,6 +48,12 @@ class BaseQuery:
         """Returns a list of models"""
 
         return self.query.get()
+    
+    def with_count(self, *relationships):
+        """Returns a list of models with counts"""
+
+        self.query.with_count(*relationships)
+        return self
 
     def paginate(self, per_page: Optional[int] = None, page: Optional[int] = None):
         """Returns a paginated list of models"""

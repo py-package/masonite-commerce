@@ -15,11 +15,12 @@ from masonite.configuration.Configuration import Configuration
 from masonite.configuration import config
 
 from tests.integrations.app.middlewares import VerifyCsrfToken, AuthenticationMiddleware
+from masonite.middleware import CorsMiddleware
 
 
 class Kernel:
 
-    http_middleware = [MaintenanceModeMiddleware, EncryptCookies]
+    http_middleware = [CorsMiddleware, MaintenanceModeMiddleware, EncryptCookies]
 
     route_middleware = {
         "web": [SessionMiddleware, LoadUserMiddleware, VerifyCsrfToken],

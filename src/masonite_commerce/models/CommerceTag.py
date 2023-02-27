@@ -19,5 +19,4 @@ class CommerceTag(Model):
     def products(self):
         """Returns all products for this tag."""
         from ..models.CommerceProduct import CommerceProduct
-
         return CommerceProduct

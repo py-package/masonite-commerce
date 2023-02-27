@@ -5,8 +5,6 @@ from src.masonite_commerce.controllers.dashboard.dashboard_controller import Das
 
 endpoint = config("commerce.endpoint.dashboard", default="")
 
-print(endpoint)
-
 ROUTES = Route.group(
     [
         Route.get("/", DashboardController.index),
