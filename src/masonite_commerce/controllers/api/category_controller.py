@@ -33,6 +33,9 @@ class CategoryController(Controller):
         
         if self.request.input("parent_id", None):
             query.where_parent_id(self.request.input("parent_id", None))
+
+        if self.request.input("except_id", None):
+            query.where_not_id(self.request.input("except_id", None))
         
         return query.paginate(per_page, page)
 

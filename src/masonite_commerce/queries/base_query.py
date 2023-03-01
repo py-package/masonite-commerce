@@ -54,6 +54,12 @@ class BaseQuery:
 
         self.query.with_count(*relationships)
         return self
+    
+    def where_not_id(self, id: int):
+        """Filters a model by id"""
+
+        self.query.where("id", "!=", id)
+        return self
 
     def paginate(self, per_page: Optional[int] = None, page: Optional[int] = None):
         """Returns a paginated list of models"""

@@ -4,6 +4,7 @@ from masonite.request import Request
 from masonite.response import Response
 
 from src.masonite_commerce.models.CommerceCustomer import CommerceCustomer
+from src.masonite_commerce.queries.customer_query import CustomerQuery
 
 
 class CustomerController(Controller):
@@ -12,16 +13,20 @@ class CustomerController(Controller):
         self.request = request
 
     def index(self):
-        """Returns a list of products"""
+        """Returns a list of customers"""
 
         per_page = int(self.request.input("per-page", 10))
         page = int(self.request.input("page", 1))
 
-        customers = (
-            CommerceCustomer.paginate(per_page, page)
+        query = (
+            CustomerQuery()
+            .asc("name")
         )
 
-        return customers
+        if self.request.input("name", None):
+            query.where_name(self.request.input("name", None))
+
+        return query.paginate(per_page, page)
 
     def store(self):
         pass
